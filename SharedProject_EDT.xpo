@@ -1,0 +1,210 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: UTE
+
+; Microsoft Dynamics AX Enum: LocationFound unloaded
+; --------------------------------------------------------------------------------
+  USERTYPEVERSION 6
+  
+  USERTYPE #LocationFound
+  ENUM
+    PROPERTIES
+      Name                #LocationFound
+      Extends             #NoYesId
+      EnumType            #NoYes
+    ENDPROPERTIES
+    
+    TYPEELEMENTS
+    ENDTYPEELEMENTS
+    
+    TYPEREFERENCES
+    ENDTYPEREFERENCES
+    
+  ENDUSERTYPE
+  
+
+***Element: UTI
+
+; Microsoft Dynamics AX Integer: ERL_OpnameTagNum unloaded
+; --------------------------------------------------------------------------------
+  USERTYPEVERSION 6
+  
+  USERTYPE #ERL_OpnameTagNum
+  INT
+    PROPERTIES
+      Name                #ERL_OpnameTagNum
+    ENDPROPERTIES
+    
+    TYPEELEMENTS
+    ENDTYPEELEMENTS
+    
+    TYPEREFERENCES
+    ENDTYPEREFERENCES
+    
+  ENDUSERTYPE
+  
+
+***Element: UTS
+
+; Microsoft Dynamics AX String: ERL_OpnameTagId unloaded
+; --------------------------------------------------------------------------------
+  USERTYPEVERSION 6
+  
+  USERTYPE #ERL_OpnameTagId
+  STRING
+    PROPERTIES
+      Name                #ERL_OpnameTagId
+      Label               #Tag. ID
+    ENDPROPERTIES
+    
+    TYPEELEMENTS
+    ENDTYPEELEMENTS
+    
+    TYPEREFERENCES
+    ENDTYPEREFERENCES
+    
+  ENDUSERTYPE
+  
+
+***Element: UTS
+
+; Microsoft Dynamics AX String: ERL_OpnameID unloaded
+; --------------------------------------------------------------------------------
+  USERTYPEVERSION 6
+  
+  USERTYPE #ERL_OpnameID
+  STRING
+    PROPERTIES
+      Name                #ERL_OpnameID
+      Label               #Opname ID
+      StringSize          #30
+    ENDPROPERTIES
+    
+    TYPEELEMENTS
+    ENDTYPEELEMENTS
+    
+    TYPEREFERENCES
+      TYPEREFERENCETYPE DATASET
+      PROPERTIES
+        Table               #ERL_StockOpname2
+        RelatedField        #
+      ENDPROPERTIES
+      
+    ENDTYPEREFERENCES
+    
+  ENDUSERTYPE
+  
+
+***Element: UTS
+
+; Microsoft Dynamics AX String: ERL_OpnameRefrenceId unloaded
+; --------------------------------------------------------------------------------
+  USERTYPEVERSION 6
+  
+  USERTYPE #ERL_OpnameRefrenceId
+  STRING
+    PROPERTIES
+      Name                #ERL_OpnameRefrenceId
+      Label               #Refrence Id
+      StringSize          #25
+    ENDPROPERTIES
+    
+    TYPEELEMENTS
+    ENDTYPEELEMENTS
+    
+    TYPEREFERENCES
+      TYPEREFERENCETYPE DATASET
+      PROPERTIES
+        Table               #ERL_OpnameTag2
+        RelatedField        #ERL_GroupTag
+      ENDPROPERTIES
+      
+    ENDTYPEREFERENCES
+    
+  ENDUSERTYPE
+  
+
+***Element: UTR
+
+; Microsoft Dynamics AX Real: ERL_StockCounted unloaded
+; --------------------------------------------------------------------------------
+  USERTYPEVERSION 6
+  
+  USERTYPE #ERL_StockCounted
+  REAL
+    PROPERTIES
+      Name                #ERL_StockCounted
+      Label               #Stock Count
+      Extends             #InventQty
+      AllowNegative       #Yes
+    ENDPROPERTIES
+    
+    TYPEELEMENTS
+    ENDTYPEELEMENTS
+    
+    TYPEREFERENCES
+    ENDTYPEREFERENCES
+    
+  ENDUSERTYPE
+  
+
+***Element: UTS
+
+; Microsoft Dynamics AX String: ERL_OpnamePeriodeId unloaded
+; --------------------------------------------------------------------------------
+  USERTYPEVERSION 6
+  
+  USERTYPE #ERL_OpnamePeriodeId
+  STRING
+    PROPERTIES
+      Name                #ERL_OpnamePeriodeId
+      Label               #Opname Periode Id
+      StringSize          #25
+    ENDPROPERTIES
+    
+    TYPEELEMENTS
+    ENDTYPEELEMENTS
+    
+    TYPEREFERENCES
+      TYPEREFERENCETYPE DATASET
+      PROPERTIES
+        Table               #ERL_OpnamePeriode
+        RelatedField        #ERL_OpnamePeriodeId
+      ENDPROPERTIES
+      
+    ENDTYPEREFERENCES
+    
+  ENDUSERTYPE
+  
+
+***Element: UTS
+
+; Microsoft Dynamics AX String: ERL_MasterWHID unloaded
+; --------------------------------------------------------------------------------
+  USERTYPEVERSION 6
+  
+  USERTYPE #ERL_MasterWHID
+  STRING
+    PROPERTIES
+      Name                #ERL_MasterWHID
+      Label               #Master WH Id
+      StringSize          #20
+    ENDPROPERTIES
+    
+    TYPEELEMENTS
+    ENDTYPEELEMENTS
+    
+    TYPEREFERENCES
+      TYPEREFERENCETYPE DATASET
+      PROPERTIES
+        Table               #ERL_WHStockOpname
+        RelatedField        #ERL_MasterWHID
+      ENDPROPERTIES
+      
+    ENDTYPEREFERENCES
+    
+  ENDUSERTYPE
+  
+
+***Element: END

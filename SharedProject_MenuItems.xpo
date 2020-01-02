@@ -1,0 +1,91 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: FTM
+
+; Microsoft Dynamics AX MENUITEM : ERL_StockOpnameInquiries unloaded
+; --------------------------------------------------------------------------------
+  VERSION 1
+  
+  MENUITEM #ERL_StockOpnameInquiries
+    Type: 1
+    PROPERTIES
+      Name                #ERL_StockOpnameInquiries
+      Label               #Android Counting History
+      Object              #ERL_StockOpnameInquiries
+    ENDPROPERTIES
+    
+  ENDMENUITEM
+  
+
+***Element: FTM
+
+; Microsoft Dynamics AX MENUITEM : ERL_StockOpnameNewLoc unloaded
+; --------------------------------------------------------------------------------
+  VERSION 1
+  
+  MENUITEM #ERL_StockOpnameNewLoc
+    Type: 1
+    PROPERTIES
+      Name                #ERL_StockOpnameNewLoc
+      Label               #Android Counting History New Location
+      Object              #ERL_StockOpnameNewLoc
+    ENDPROPERTIES
+    
+  ENDMENUITEM
+  
+
+***Element: FTM
+
+; Microsoft Dynamics AX MENUITEM : ERL_OpnameUserGroup unloaded
+; --------------------------------------------------------------------------------
+  VERSION 1
+  
+  MENUITEM #ERL_OpnameUserGroup
+    Type: 1
+    PROPERTIES
+      Name                #ERL_OpnameUserGroup
+      Label               #Stock Opname Group
+      Object              #ERL_OpnameUserGroup
+    ENDPROPERTIES
+    
+  ENDMENUITEM
+  
+
+***Element: FTM
+
+; Microsoft Dynamics AX MENUITEM : ERL_StockOpname unloaded
+; --------------------------------------------------------------------------------
+  VERSION 1
+  
+  MENUITEM #ERL_StockOpname
+    Type: 1
+    PROPERTIES
+      Name                #ERL_StockOpname
+      Label               #Android Stock Opname
+      HelpText            #Stock opname from android
+      Object              #ERL_StockOpname
+    ENDPROPERTIES
+    
+  ENDMENUITEM
+  
+
+***Element: FTM
+
+; Microsoft Dynamics AX MENUITEM : ERL_TransferStockOpname unloaded
+; --------------------------------------------------------------------------------
+  VERSION 1
+  
+  MENUITEM #ERL_TransferStockOpname
+    Type: 3
+    PROPERTIES
+      Name                #ERL_TransferStockOpname
+      Label               #Transfer
+      ObjectType          #Class
+      Object              #ERL_TransferStockOpname
+    ENDPROPERTIES
+    
+  ENDMENUITEM
+  
+
+***Element: END

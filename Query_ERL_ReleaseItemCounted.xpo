@@ -1,0 +1,115 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: QUE
+
+; Microsoft Dynamics AX Query: ERL_ReleaseItemCounted unloaded
+; --------------------------------------------------------------------------------
+VERSION 18
+
+QUERY #ERL_ReleaseItemCounted
+  PROPERTIES
+    Name                #ERL_ReleaseItemCounted
+    Version             #12
+    NextUniqueId        #1003
+  ENDPROPERTIES
+  
+  METHODS
+    Version: 3
+    SOURCE #classDeclaration
+      #public class QueryRun extends ObjectRun
+      #{
+      #}
+    ENDSOURCE
+  ENDMETHODS
+  BLOCKS
+    BLOCK #InventItemLocation
+      PROPERTIES
+        Name                #InventItemLocation_1
+        Table               #InventItemLocation
+        UniqueId            #1000
+      ENDPROPERTIES
+      
+      FIELDLIST
+        PROPERTIES
+        ENDPROPERTIES
+        
+      ENDFIELDLIST
+      SORTING
+      ENDSORTING
+      LINES
+      ENDLINES
+      BLOCKS
+        BLOCK #InventDim
+          PROPERTIES
+            Name                #InventDim_1
+            Table               #InventDim
+            UniqueId            #1001
+          ENDPROPERTIES
+          
+          FIELDLIST
+            PROPERTIES
+            ENDPROPERTIES
+            
+          ENDFIELDLIST
+          SORTING
+          ENDSORTING
+          LINES
+          ENDLINES
+          BLOCKS
+            BLOCK #InventJournalTable
+              PROPERTIES
+                Name                #InventJournalTable_1
+                Table               #InventJournalTable
+                UniqueId            #1002
+                JoinMode            #OuterJoin
+              ENDPROPERTIES
+              
+              FIELDLIST
+                PROPERTIES
+                ENDPROPERTIES
+                
+              ENDFIELDLIST
+              SORTING
+              ENDSORTING
+              LINES
+              ENDLINES
+              BLOCKS
+              ENDBLOCKS
+              ASSOCIATIONS
+                ASSOCIATION
+                  JOINDATASOURCE #InventItemLocation_1
+                  MASTERFIELD  #CountingJournalId
+                  DETAILSFIELD #JournalId
+              ENDASSOCIATIONS
+            ENDBLOCK
+          ENDBLOCKS
+          ASSOCIATIONS
+            ASSOCIATION
+              JOINDATASOURCE #InventItemLocation_1
+              MASTERFIELD  #inventDimId
+              DETAILSFIELD #inventDimId
+          ENDASSOCIATIONS
+        ENDBLOCK
+      ENDBLOCKS
+      GROUPBY
+      ENDGROUPBY
+      ORDERBY
+      ENDORDERBY
+    ENDBLOCK
+  ENDBLOCKS
+  DEPENDENTS
+    DEPENDENT
+      PROPERTIES
+        Name                #ERL_ReleaseItemCounted
+        DependentType       #View
+      ENDPROPERTIES
+      
+      Id 51464
+  ENDDEPENDENTS
+  COMPOSITEQUERIES
+  ENDCOMPOSITEQUERIES
+ENDQUERY
+
+
+***Element: END

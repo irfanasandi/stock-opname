@@ -1,0 +1,424 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: FRM
+
+; Microsoft Dynamics AX Forms unloaded
+; --------------------------------------------------------------------------------
+FRMVERSION 5
+
+FORM #ERL_OpnameHistory
+  PROPERTIES
+    Name                #ERL_OpnameHistory
+  ENDPROPERTIES
+  
+  METHODS
+    Version: 3
+    SOURCE #classDeclaration
+      #public class FormRun extends ObjectRun
+      #{
+      #    ERL_StockOpnameLines        opLines;
+      #    QueryBuildDatasource        qbds, qbdsHeader;
+      #    QueryBuildRange             qbrHeader;
+      #    Dimension1                  bu;
+      #    MultiSelectionHelper        selectionHelper;
+      #
+      #}
+    ENDSOURCE
+    SOURCE #init
+      #public void init()
+      #{
+      #    ERL_WHStockOpname       wh;
+      #    ;
+      #    super();
+      #    bu = SysuserInfo::find(curuserid()).Dimension1;
+      #    select firstfast firstonly wh where wh.InventSiteId == bu;
+      #
+      #    qbds = ERL_StockOpnameLines_ds.query().dataSourceTable(tablenum(ERL_StockOpnameLines));
+      #    qbds.addRange(fieldnum(ERL_StockOpnameLines, ERL_MasterWHId)).value(sysquery::value(wh.ERL_MasterWHID));
+      #    //qbds.addOrderByField(fieldnum(ERL_StockOpnameLines, ItemId), sortOrder::Ascending);
+      #    qbds.addOrderByField(fieldnum(ERL_StockOpnameLines, Transdate), sortOrder::Descending);
+      #
+      #    qbdsHeader = ERL_StockOpname_ds.query().dataSourceTable(tablenum(ERL_StockOpname));
+      #    qbrHeader = qbdsHeader.addRange(fieldnum(ERL_StockOpname, ERL_StatusOpnameTag));
+      #
+      #}
+    ENDSOURCE
+  ENDMETHODS
+  OBJECTBANK
+    PROPERTIES
+    ENDPROPERTIES
+    
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #ERL_StockOpnameLines
+          Table               #ERL_StockOpnameLines
+          AllowEdit           #No
+          AllowCreate         #No
+          AllowDelete         #No
+          InsertIfEmpty       #No
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+      METHODS
+        Version: 3
+        SOURCE #OpnamePeriode
+          #Display description OpnamePeriode(ERL_StockOpnameLines     _lines)
+          #{
+          #    ERL_StockOpname     header;
+          #    ;
+          #
+          #    select firstfast firstonly header where header.OpnameRefrenceId == _lines.OpnameRefrenceId;
+          #
+          #    return header.Periode();
+          #
+          #}
+        ENDSOURCE
+        SOURCE #dCalcQty
+          #Display Qty dCalcQty(ERL_StockOpnameLines   _lines)
+          #{
+          #    ERL_OnhandStockOpname   onhand;
+          #    ERL_WHStockOpname       wh;
+          #    select inventsiteid from wh where wh.ERL_MasterWHID == _lines.ERL_MasterWHID;
+          #    select firstfast onhand where onhand.ItemId == _lines.ItemId
+          #        && _lines.wMsLocationId == onhand.wMSLocationId && onhand.InventSiteId == wh.InventSiteId;
+          #    return _lines.PhysicalQty - onhand.SumOfAvailPhysical;
+          #}
+        ENDSOURCE
+        SOURCE #InventSiteId
+          #Display InventSiteId InventSiteId(ERL_StockOpnameLines      _lines)
+          #{
+          #    ERL_WHStockOpname       tableWH;
+          #    ;
+          #    select firstfast tableWH where tableWH.ERL_MasterWHID == _lines.ERL_MasterWHID;
+          #    return tableWH.InventSiteId;
+          #}
+        ENDSOURCE
+        SOURCE #ItemName
+          #Display ItemName ItemName(ERL_StockOpnameLines  _lines)
+          #{
+          #    ;
+          #    return InventTable::find(_lines.ItemId, false).itemName;
+          #
+          #}
+        ENDSOURCE
+        SOURCE #executeQuery
+          #public void executeQuery()
+          #{
+          #     qbrHeader.value(sysQuery::value(StatusTag.valueStr()));
+          #     super();
+          #}
+        ENDSOURCE
+      ENDMETHODS
+    ENDDATASOURCE
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #ERL_StockOpname
+          Table               #ERL_StockOpname
+          AllowEdit           #No
+          AllowCreate         #No
+          AllowDelete         #No
+          JoinSource          #ERL_StockOpnameLines
+          LinkType            #InnerJoin
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+      METHODS
+        Version: 3
+        SOURCE #executeQuery
+          #public void executeQuery()
+          #{
+          #    qbrHeader.value(sysQuery::value(StatusTag.valueStr()));
+          #    super();
+          #}
+        ENDSOURCE
+      ENDMETHODS
+    ENDDATASOURCE
+  ENDOBJECTBANK
+  
+  JOINS
+    ERL_StockOpname ERL_StockOpnameLines
+  ENDJOINS
+  
+  DESIGN
+    PROPERTIES
+      Caption             #Android Opname History
+    ENDPROPERTIES
+    
+    CONTAINER
+      CONTROL GROUP
+        PROPERTIES
+          Name                #TopFields
+          Width               #Column width
+          Height              #45
+          FrameType           #None
+          Columns             #Auto
+        ENDPROPERTIES
+        
+          CONTAINER
+            CONTROL CHECKBOX
+              PROPERTIES
+                Name                #LocationCheckBox
+                AutoDeclaration     #Yes
+                Visible             #No
+                Label               #New Location
+              ENDPROPERTIES
+              
+              METHODS
+                Version: 3
+                SOURCE #modified
+                  #public boolean modified()
+                  #{
+                  #    boolean ret;
+                  #
+                  #    ret = super();
+                  #
+                  #    ERL_StockOpnameLines_ds.executeQuery();
+                  #    return ret;
+                  #}
+                ENDSOURCE
+              ENDMETHODS
+            ENDCONTROL 
+            
+            CONTROL COMBOBOX
+              PROPERTIES
+                Name                #StatusTag
+                AutoDeclaration     #Yes
+                Label               #Status
+                EnumType            #ERL_StatusOpnameTag
+              ENDPROPERTIES
+              
+              METHODS
+                Version: 3
+                SOURCE #selectionChange
+                  #public int selectionChange()
+                  #{
+                  #    int ret;
+                  #
+                  #    ret = super();
+                  #
+                  #    ERL_StockOpnameLines_ds.executeQuery();
+                  #    return ret;
+                  #}
+                ENDSOURCE
+              ENDMETHODS
+            ENDCONTROL 
+            
+          ENDCONTAINER
+          
+      ENDCONTROL 
+      
+      CONTROL TAB
+        PROPERTIES
+          Name                #Tab
+          Width               #Column width
+          Height              #Column height
+          Tabs                #1
+        ENDPROPERTIES
+        
+        CONTAINER
+          CONTROL TABPAGE
+            PROPERTIES
+              Name                #Overview
+              Caption             #@SYS9039
+            ENDPROPERTIES
+            
+            CONTAINER
+              CONTROL GRID
+                PROPERTIES
+                  Name                #Grid
+                  AllowEdit           #No
+                  Width               #Column width
+                  Height              #Column height
+                  DataSource          #ERL_StockOpnameLines
+                ENDPROPERTIES
+                
+                  CONTAINER
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #InventSiteId
+                        DataSource          #ERL_StockOpnameLines
+                        DataMethod          #InventSiteId
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #ERL_StockOpnameLines_ItemId
+                        DataSource          #ERL_StockOpnameLines
+                        DataField           #ItemId
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #ItemName
+                        Label               #Item Name
+                        DataSource          #ERL_StockOpnameLines
+                        DataMethod          #ItemName
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #ERL_StockOpnameLines_wMsLocationId
+                        DataSource          #ERL_StockOpnameLines
+                        DataField           #wMsLocationId
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #ERL_StockOpnameLines_wMSLocationIdNew
+                        DataSource          #ERL_StockOpnameLines
+                        DataField           #wMSLocationIdNew
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL CHECKBOX
+                      PROPERTIES
+                        Name                #ERL_StockOpnameLines_LocationFound
+                        Visible             #No
+                        BackgroundColor     #Window background
+                        DataSource          #ERL_StockOpnameLines
+                        DataField           #LocationFound
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL REALEDIT
+                      PROPERTIES
+                        Name                #Onhand
+                        Label               #Onhand
+                        DataSource          #ERL_StockOpnameLines
+                        DataMethod          #OnHand
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL REALEDIT
+                      PROPERTIES
+                        Name                #ERL_StockOpnameLines_PhysicalQty
+                        Label               #Counted Quantity
+                        DataSource          #ERL_StockOpnameLines
+                        DataField           #PhysicalQty
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL REALEDIT
+                      PROPERTIES
+                        Name                #InventQty
+                        Label               #Invent Quantity
+                        DataSource          #ERL_StockOpnameLines
+                        DataMethod          #dCalcQty
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL COMBOBOX
+                      PROPERTIES
+                        Name                #ERL_StockOpnameLines_ERL_JournalStatus
+                        DataSource          #ERL_StockOpnameLines
+                        DataField           #ERL_JournalStatus
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #ERL_StockOpnameLines_ERL_OpnameTagId
+                        DataSource          #ERL_StockOpnameLines
+                        DataField           #ERL_OpnameTagId
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL DATEEDIT
+                      PROPERTIES
+                        Name                #ERL_StockOpnameLines_TransDate
+                        DataSource          #ERL_StockOpnameLines
+                        DataField           #TransDate
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #ERL_StockOpnameLines_createdBy
+                        DataSource          #ERL_StockOpnameLines
+                        DataField           #createdBy
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #Periode
+                        Label               #Periode
+                        DataSource          #ERL_StockOpname
+                        DataMethod          #Periode
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL COMBOBOX
+                      PROPERTIES
+                        Name                #ERL_StockOpname_ERL_StatusOpnameTag
+                        DataSource          #ERL_StockOpname
+                        DataField           #ERL_StatusOpnameTag
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+            ENDCONTAINER
+            
+          ENDCONTROL 
+          
+        ENDCONTAINER
+        
+      ENDCONTROL 
+      
+      CONTROL BUTTONGROUP
+        PROPERTIES
+          Name                #ButtonGroup
+        ENDPROPERTIES
+        
+        CONTAINER
+          CONTROL MENUITEMBUTTON
+            PROPERTIES
+              Name                #InventOnhand
+              Text                #Onhand
+              MenuItemName        #ERL_OnhandStockOpname
+              DataSource          #ERL_StockOpnameLines
+            ENDPROPERTIES
+            
+          ENDCONTROL 
+          
+        ENDCONTAINER
+        
+      ENDCONTROL 
+      
+    ENDCONTAINER
+    
+  ENDDESIGN
+  
+ENDFORM
+
+
+***Element: END

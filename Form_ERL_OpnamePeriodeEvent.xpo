@@ -1,0 +1,184 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: FRM
+
+; Microsoft Dynamics AX Forms unloaded
+; --------------------------------------------------------------------------------
+FRMVERSION 5
+
+FORM #ERL_OpnamePeriodeEvent
+  PROPERTIES
+    Name                #ERL_OpnamePeriodeEvent
+  ENDPROPERTIES
+  
+  METHODS
+    Version: 3
+    SOURCE #classDeclaration
+      #public class FormRun extends ObjectRun
+      #{
+      #    querybuildDataSource    qbds;
+      #    queryBuildRange         qbrStatus;
+      #}
+    ENDSOURCE
+    SOURCE #init
+      #public void init()
+      #{
+      #    super();
+      #
+      #    qbds = ERL_OpnamePeriodeEvent_ds.query().dataSourceTable(tablenum(ERL_OpnamePeriodeEvent));
+      #    qbrStatus = qbds.addRange(fieldnum(ERL_OpnamePeriodeEvent, PeriodeEventStatus));
+      #}
+    ENDSOURCE
+  ENDMETHODS
+  OBJECTBANK
+    PROPERTIES
+    ENDPROPERTIES
+    
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #ERL_OpnamePeriodeEvent
+          Table               #ERL_OpnamePeriodeEvent
+          InsertAtEnd         #No
+          InsertIfEmpty       #No
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+      METHODS
+        Version: 3
+        SOURCE #init
+          #public void init()
+          #{
+          #    Dimension1  bu;
+          #    super();
+          #    bu = ERL_Global::getUserBU();
+          #
+          #    if(bu != "50")
+          #        this.query().dataSourceTable(tableNum("ERL_OpnamePeriodeEvent")).addRange(fieldNum(ERL_OpnamePeriodeEvent,Dimension)).value(bu);
+          #}
+        ENDSOURCE
+        SOURCE #executeQuery
+          #public void executeQuery()
+          #{
+          #    qbrStatus.value( sysquery::value(PeriodeStatus.selection()));
+          #    super();
+          #}
+        ENDSOURCE
+      ENDMETHODS
+    ENDDATASOURCE
+  ENDOBJECTBANK
+  
+  JOINS
+  ENDJOINS
+  
+  DESIGN
+    PROPERTIES
+      Caption             #Opname Periode Event
+    ENDPROPERTIES
+    
+    CONTAINER
+      CONTROL COMBOBOX
+        PROPERTIES
+          Name                #PeriodeStatus
+          AutoDeclaration     #Yes
+          Label               #Filter Status
+          EnumType            #ERL_OpnamePeriodeEventStatus
+        ENDPROPERTIES
+        
+        METHODS
+          Version: 3
+          SOURCE #selectionChange
+            #public int selectionChange()
+            #{
+            #    int ret;
+            #
+            #    ret = super();
+            #
+            #    ERL_OpnamePeriodeEvent_ds.executeQuery();
+            #
+            #    return ret;
+            #}
+          ENDSOURCE
+        ENDMETHODS
+      ENDCONTROL 
+      
+      CONTROL GROUP
+        PROPERTIES
+          Name                #Group
+          Width               #Column width
+          Height              #Column height
+          Caption             #Periode Event List
+        ENDPROPERTIES
+        
+          CONTAINER
+            CONTROL GRID
+              PROPERTIES
+                Name                #Grid
+                DataSource          #ERL_OpnamePeriodeEvent
+              ENDPROPERTIES
+              
+                CONTAINER
+                  CONTROL STRINGEDIT
+                    PROPERTIES
+                      Name                #ERL_OpnamePeriodeEvent_Description
+                      DataSource          #ERL_OpnamePeriodeEvent
+                      DataField           #Description
+                    ENDPROPERTIES
+                    
+                  ENDCONTROL 
+                  
+                  CONTROL DATEEDIT
+                    PROPERTIES
+                      Name                #ERL_OpnamePeriodeEvent_FromDate
+                      DataSource          #ERL_OpnamePeriodeEvent
+                      DataField           #FromDate
+                    ENDPROPERTIES
+                    
+                  ENDCONTROL 
+                  
+                  CONTROL DATEEDIT
+                    PROPERTIES
+                      Name                #ERL_OpnamePeriodeEvent_ToDate
+                      DataSource          #ERL_OpnamePeriodeEvent
+                      DataField           #ToDate
+                    ENDPROPERTIES
+                    
+                  ENDCONTROL 
+                  
+                  CONTROL STRINGEDIT
+                    PROPERTIES
+                      Name                #ERL_OpnamePeriodeEvent_Dimension[1]
+                      DataSource          #ERL_OpnamePeriodeEvent
+                      DataField           #Dimension[1]
+                    ENDPROPERTIES
+                    
+                  ENDCONTROL 
+                  
+                  CONTROL COMBOBOX
+                    PROPERTIES
+                      Name                #ERL_OpnamePeriodeEvent_PeriodeEventStatus
+                      DataSource          #ERL_OpnamePeriodeEvent
+                      DataField           #PeriodeEventStatus
+                    ENDPROPERTIES
+                    
+                  ENDCONTROL 
+                  
+                ENDCONTAINER
+                
+            ENDCONTROL 
+            
+          ENDCONTAINER
+          
+      ENDCONTROL 
+      
+    ENDCONTAINER
+    
+  ENDDESIGN
+  
+ENDFORM
+
+
+***Element: END

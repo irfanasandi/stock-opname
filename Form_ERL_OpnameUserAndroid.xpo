@@ -1,0 +1,144 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: FRM
+
+; Microsoft Dynamics AX Forms unloaded
+; --------------------------------------------------------------------------------
+FRMVERSION 5
+
+FORM #ERL_OpnameUserAndroid
+  PROPERTIES
+    Name                #ERL_OpnameUserAndroid
+  ENDPROPERTIES
+  
+  METHODS
+    Version: 3
+    SOURCE #classDeclaration
+      #public class FormRun extends ObjectRun
+      #{
+      #
+      #}
+    ENDSOURCE
+  ENDMETHODS
+  OBJECTBANK
+    PROPERTIES
+    ENDPROPERTIES
+    
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #ERL_OpnameUserAndroid
+          Table               #ERL_OpnameUserAndroid
+          InsertAtEnd         #No
+          InsertIfEmpty       #No
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+      METHODS
+        Version: 3
+        SOURCE #init
+          #public void init()
+          #{
+          #    Dimension1  bu;
+          #    super();
+          #    bu = ERL_Global::getUserBU();
+          #
+          #    //if(bu != "50")
+          #        this.query().dataSourceTable(tableNum("ERL_OpnameUserAndroid")).addRange(fieldNum(ERL_OpnameUserAndroid,Dimension1)).value(bu);
+          #}
+        ENDSOURCE
+      ENDMETHODS
+    ENDDATASOURCE
+  ENDOBJECTBANK
+  
+  JOINS
+  ENDJOINS
+  
+  DESIGN
+    PROPERTIES
+      Caption             #Opname User Login Android
+    ENDPROPERTIES
+    
+    CONTAINER
+      CONTROL GROUP
+        PROPERTIES
+          Name                #Group
+          Width               #Column width
+          Height              #Column height
+          Caption             #User Login Android List
+        ENDPROPERTIES
+        
+          CONTAINER
+            CONTROL GRID
+              PROPERTIES
+                Name                #Grid
+                DataSource          #ERL_OpnameUserAndroid
+              ENDPROPERTIES
+              
+                CONTAINER
+                  CONTROL STRINGEDIT
+                    PROPERTIES
+                      Name                #ERL_OpnameUserAndroid_EmplId
+                      DataSource          #ERL_OpnameUserAndroid
+                      DataField           #EmplId
+                    ENDPROPERTIES
+                    
+                  ENDCONTROL 
+                  
+                  CONTROL STRINGEDIT
+                    PROPERTIES
+                      Name                #ERL_OpnameUserAndroid_Username
+                      DataSource          #ERL_OpnameUserAndroid
+                      DataField           #Username
+                    ENDPROPERTIES
+                    
+                  ENDCONTROL 
+                  
+                  CONTROL STRINGEDIT
+                    PROPERTIES
+                      Name                #ERL_OpnameUserAndroid_Password
+                      DataSource          #ERL_OpnameUserAndroid
+                      DataField           #Password
+                    ENDPROPERTIES
+                    
+                  ENDCONTROL 
+                  
+                  CONTROL STRINGEDIT
+                    PROPERTIES
+                      Name                #ERL_OpnameUserAndroid_Name
+                      AllowEdit           #No
+                      DataSource          #ERL_OpnameUserAndroid
+                      DataField           #Name
+                    ENDPROPERTIES
+                    
+                  ENDCONTROL 
+                  
+                  CONTROL STRINGEDIT
+                    PROPERTIES
+                      Name                #ERL_OpnameUserAndroid_Dimension1
+                      AllowEdit           #No
+                      DataSource          #ERL_OpnameUserAndroid
+                      DataField           #Dimension1
+                    ENDPROPERTIES
+                    
+                  ENDCONTROL 
+                  
+                ENDCONTAINER
+                
+            ENDCONTROL 
+            
+          ENDCONTAINER
+          
+      ENDCONTROL 
+      
+    ENDCONTAINER
+    
+  ENDDESIGN
+  
+ENDFORM
+
+
+***Element: END

@@ -1,0 +1,660 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: FRM
+
+; Microsoft Dynamics AX Forms unloaded
+; --------------------------------------------------------------------------------
+FRMVERSION 5
+
+FORM #ERL_StockOpname
+  PROPERTIES
+    Name                #ERL_StockOpname
+  ENDPROPERTIES
+  
+  METHODS
+    Version: 3
+    SOURCE #classDeclaration
+      #public class FormRun extends ObjectRun
+      #{
+      #    QueryBuildDataSource    qbds;
+      #    QueryBuildRange         qbrStatus;
+      #
+      #    ERL_StockOpname         sop;
+      #    ERL_stockOpnamelines    lines;
+      #    InventTable             it;
+      #    SysUserInfo             SysUserInfo;
+      #    Dimension1              bu;
+      #
+      #    TmpReference            tmpReference;
+      #}
+    ENDSOURCE
+    SOURCE #toProgress
+      #void toProgress()
+      #{
+      #    int                 maxLines;
+      #    ERL_OpnameTagNum    maxTag;
+      #    ;
+      #    if(box::okCancel(strfmt("Proses kembali nomor %1 ?",ERL_StockOpname.OpnameRefrenceId),dialogbutton::Cancel, "Proses Kembali") == dialogButton::Ok)
+      #    {
+      #        maxLines = ERL_OpnameCostCenter::find(ERL_StockOpname.InventSiteId).MaxOpnameLines;
+      #        maxTag = maxLines + ERL_StockOpname.TagNumberStart - 1;
+      #        ttsbegin;
+      #        ERL_StockOpname.ERL_StatusOpnameTag = ERL_StatusOpnameTag::OnProgress;
+      #        ERL_StockOpname.TagNumberEnd = maxTag;
+      #        ERL_StockOpname.update();
+      #        ttscommit;
+      #
+      #        ERL_StockOpname_ds.reread();
+      #        ERL_StockOpname_ds.research(true);
+      #    }
+      #}
+    ENDSOURCE
+    SOURCE #doRefresh
+      #public static void doRefresh()
+      #{
+      #    ERL_StockOpname_ds.reread();
+      #    ERL_StockOpname_ds.research(true);
+      #
+      #    ERL_StockOpnameLines_ds.reread();
+      #    ERL_StockOpnameLines_ds.refresh();
+      #}
+    ENDSOURCE
+    SOURCE #init
+      #public void init()
+      #{
+      #    super();
+      #
+      #    qbds = ERL_StockOpname_ds.query().dataSourceTable(tablenum(erl_stockopname));
+      #    qbrStatus   = qbds.addRange(fieldnum(erl_stockopname, erl_statusOpnameTag));
+      #
+      #    //qbdsLines = ERL_StockOpnameLines_ds.query().dataSourceTable(tablenum(erl_stockOpnameLines));
+      #
+      #    bu = SysUserInfo::find(curuserid()).Dimension1;
+      #    qbds.addRange(fieldId2Ext(fieldnum(erl_stockopname, dimension), 1)).value(bu);
+      #
+      #}
+    ENDSOURCE
+  ENDMETHODS
+  OBJECTBANK
+    PROPERTIES
+    ENDPROPERTIES
+    
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #ERL_StockOpname
+          Table               #ERL_StockOpname
+          AllowCreate         #No
+          AllowDelete         #No
+          InsertIfEmpty       #No
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+      METHODS
+        Version: 3
+        SOURCE #active
+          #public int active()
+          #{
+          #    int ret;
+          #
+          #    ret = super();
+          #
+          #    ERL_TransferButton.enabled(erl_stockopname.ERL_StatusOpnameTag == erl_statusopnametag::Open
+          #        && ERL_TransferStockOpname::cekLines(erl_stockopname.OpnameRefrenceId));
+          #    rejectButton.enabled(erl_stockopname.ERL_StatusOpnameTag == erl_statusopnametag::Open);
+          #    progressButton.enabled(ERL_StockOpname.ERL_StatusOpnameTag == ERL_StatusOpnameTag::Open);
+          #    return ret;
+          #}
+        ENDSOURCE
+        SOURCE #executeQuery
+          #public void executeQuery()
+          #{
+          #    ERL_StatusOpnameTag     status;
+          #    ;
+          #
+          #    status = cbotrf.selection();
+          #    qbrStatus.value(sysquery::value(status));
+          #    super();
+          #}
+        ENDSOURCE
+      ENDMETHODS
+    ENDDATASOURCE
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #ERL_StockOpnameLines
+          Table               #ERL_StockOpnameLines
+          AllowCreate         #No
+          JoinSource          #ERL_StockOpname
+          LinkType            #Active
+          InsertIfEmpty       #No
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+      METHODS
+        Version: 3
+        SOURCE #ItemName
+          #Display ItemName ItemName(ERL_StockOpnameLines  _lines)
+          #{
+          #    ;
+          #    return InventTable::find(_lines.ItemId).ItemName;
+          #}
+        ENDSOURCE
+        SOURCE #executeQuery
+          #public void executeQuery()
+          #{
+          #    super();
+          #    //qbdsLines.addRange(fieldnum(ERL_StockOpnameLines, LocationFound)).value(sysquery::value(!LocationCheckBox.value()));
+          #}
+        ENDSOURCE
+        SOURCE #active
+          #public int active()
+          #{
+          #    boolean   status = erl_stockopnamelines.ERL_JournalStatus == erl_journalstatus::None;
+          #    int ret;
+          #
+          #    ret = super();
+          #    ERL_StockOpnameLines_wMSLocationId.allowEdit(status);
+          #    ERL_StockOpnameLines_itemId.allowEdit(status);
+          #    ERL_StockOpnameLines_PhysicalQty.allowEdit(status);
+          #    return ret;
+          #}
+        ENDSOURCE
+      ENDMETHODS
+    ENDDATASOURCE
+  ENDOBJECTBANK
+  
+  JOINS
+    ERL_StockOpnameLines ERL_StockOpname
+  ENDJOINS
+  
+  DESIGN
+    PROPERTIES
+      Caption             #Stock Opname
+    ENDPROPERTIES
+    
+    CONTAINER
+      CONTROL GROUP
+        PROPERTIES
+          Name                #TopFields
+          Width               #Column width
+          Height              #50
+          Caption             #Option
+          Columns             #4
+          ArrangeGuide        
+            ARRAY INDEX Columns 
+              #0
+              #0
+              #0
+              #0
+            ENDARRAY
+        ENDPROPERTIES
+        
+          CONTAINER
+            CONTROL COMBOBOX
+              PROPERTIES
+                Name                #cboTrf
+                AutoDeclaration     #Yes
+                LabelBold           #Bold
+                EnumType            #ERL_StatusOpnameTag
+                ComboType           #List
+              ENDPROPERTIES
+              
+              METHODS
+                Version: 3
+                SOURCE #selectionChange
+                  #public int selectionChange()
+                  #{
+                  #    int ret;
+                  #
+                  #    ret = super();
+                  #
+                  #    ERL_StockOpname_ds.executeQuery();
+                  #    return ret;
+                  #}
+                ENDSOURCE
+              ENDMETHODS
+            ENDCONTROL 
+            
+            CONTROL CHECKBOX
+              PROPERTIES
+                Name                #LocationCheckBox
+                AutoDeclaration     #Yes
+                Visible             #No
+                Label               #New Location
+              ENDPROPERTIES
+              
+              METHODS
+                Version: 3
+                SOURCE #modified
+                  #public boolean modified()
+                  #{
+                  #    boolean ret;
+                  #
+                  #    ret = super();
+                  #
+                  #    ERL_StockOpnameLines_ds.executeQuery();
+                  #    return ret;
+                  #}
+                ENDSOURCE
+              ENDMETHODS
+            ENDCONTROL 
+            
+          ENDCONTAINER
+          
+      ENDCONTROL 
+      
+      CONTROL GROUP
+        PROPERTIES
+          Name                #GroupHeader
+          AllowEdit           #No
+          Width               #Column width
+          Height              #Column height
+          FrameType           #None
+        ENDPROPERTIES
+        
+          CONTAINER
+            CONTROL TAB
+              PROPERTIES
+                Name                #Tab
+                Width               #Column width
+                Height              #Column height
+                DataSource          #ERL_StockOpname
+              ENDPROPERTIES
+              
+              CONTAINER
+                CONTROL TABPAGE
+                  PROPERTIES
+                    Name                #Overview
+                    Width               #Column width
+                    Height              #Column height
+                    Caption             #Overview
+                    HideIfEmpty         #No
+                  ENDPROPERTIES
+                  
+                  CONTAINER
+                    CONTROL GRID
+                      PROPERTIES
+                        Name                #Grid1
+                        AllowEdit           #No
+                        Width               #Column width
+                        Height              #Column height
+                        DataSource          #ERL_StockOpname
+                      ENDPROPERTIES
+                      
+                        CONTAINER
+                          CONTROL STRINGEDIT
+                            PROPERTIES
+                              Name                #OpnameRefrenceId
+                              DataSource          #ERL_StockOpname
+                              DataField           #OpnameRefrenceId
+                            ENDPROPERTIES
+                            
+                          ENDCONTROL 
+                          
+                          CONTROL COMBOBOX
+                            PROPERTIES
+                              Name                #Grid1_ERL_StatusOpnameTag
+                              DataSource          #ERL_StockOpname
+                              DataField           #ERL_StatusOpnameTag
+                            ENDPROPERTIES
+                            
+                          ENDCONTROL 
+                          
+                          CONTROL STRINGEDIT
+                            PROPERTIES
+                              Name                #ERL_StockOpname_InventSiteId
+                              DataSource          #ERL_StockOpname
+                              DataField           #InventSiteId
+                            ENDPROPERTIES
+                            
+                          ENDCONTROL 
+                          
+                          CONTROL UTCDATETIMEEDIT
+                            PROPERTIES
+                              Name                #ERL_StockOpname_createdDateTime
+                              DataSource          #ERL_StockOpname
+                              DataField           #createdDateTime
+                            ENDPROPERTIES
+                            
+                          ENDCONTROL 
+                          
+                          CONTROL STRINGEDIT
+                            PROPERTIES
+                              Name                #ERL_StockOpname_createdBy
+                              DataSource          #ERL_StockOpname
+                              DataField           #createdBy
+                            ENDPROPERTIES
+                            
+                          ENDCONTROL 
+                          
+                          CONTROL STRINGEDIT
+                            PROPERTIES
+                              Name                #Groupname
+                              Label               #Group
+                              DataSource          #ERL_StockOpname
+                              DataMethod          #Groupdesc
+                            ENDPROPERTIES
+                            
+                          ENDCONTROL 
+                          
+                          CONTROL STRINGEDIT
+                            PROPERTIES
+                              Name                #Periode
+                              Label               #Periode
+                              DataSource          #ERL_StockOpname
+                              DataMethod          #Periode
+                            ENDPROPERTIES
+                            
+                          ENDCONTROL 
+                          
+                          CONTROL INTEDIT
+                            PROPERTIES
+                              Name                #ERL_StockOpname_TagNumberStart
+                              Label               #Tag Start
+                              DataSource          #ERL_StockOpname
+                              DataField           #TagNumberStart
+                            ENDPROPERTIES
+                            
+                          ENDCONTROL 
+                          
+                          CONTROL INTEDIT
+                            PROPERTIES
+                              Name                #ERL_StockOpname_TagNumberEnd
+                              Label               #Tag End
+                              DataSource          #ERL_StockOpname
+                              DataField           #TagNumberEnd
+                            ENDPROPERTIES
+                            
+                          ENDCONTROL 
+                          
+                        ENDCONTAINER
+                        
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+                ENDCONTROL 
+                
+              ENDCONTAINER
+              
+            ENDCONTROL 
+            
+            CONTROL BUTTONGROUP
+              PROPERTIES
+                Name                #ButtonGroup
+              ENDPROPERTIES
+              
+              CONTAINER
+                CONTROL MENUITEMBUTTON
+                  PROPERTIES
+                    Name                #ERL_TransferButton
+                    AutoDeclaration     #Yes
+                    Enabled             #No
+                    MenuItemType        #Action
+                    MenuItemName        #ERL_TransferStockOpname
+                    DataSource          #ERL_StockOpname
+                  ENDPROPERTIES
+                  
+                ENDCONTROL 
+                
+                CONTROL MENUBUTTON
+                  PROPERTIES
+                    Name                #MenuButton
+                    Text                #Functions
+                  ENDPROPERTIES
+                  
+                  CONTAINER
+                    CONTROL MENUITEMBUTTON
+                      PROPERTIES
+                        Name                #RejectButton
+                        AutoDeclaration     #Yes
+                        Enabled             #No
+                        Text                #Reject
+                        MenuItemType        #Action
+                        MenuItemName        #erl_cancelStockOpname
+                        DataSource          #ERL_StockOpname
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL BUTTON
+                      PROPERTIES
+                        Name                #ProgressButton
+                        AutoDeclaration     #Yes
+                        Text                #Proses kembali
+                      ENDPROPERTIES
+                      
+                      METHODS
+                        Version: 3
+                        SOURCE #clicked
+                          #void clicked()
+                          #{
+                          #    ;
+                          #    element.toProgress();
+                          #}
+                        ENDSOURCE
+                      ENDMETHODS
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+                ENDCONTROL 
+                
+              ENDCONTAINER
+              
+            ENDCONTROL 
+            
+          ENDCONTAINER
+          
+      ENDCONTROL 
+      
+      CONTROL GROUP
+        PROPERTIES
+          Name                #GroupLines
+          Width               #Column width
+          Height              #Column height
+          FrameType           #None
+        ENDPROPERTIES
+        
+          CONTAINER
+            CONTROL TAB
+              PROPERTIES
+                Name                #Lines
+                Width               #Column width
+                Height              #Column height
+                DataSource          #ERL_StockOpnameLines
+                HideIfEmpty         #No
+              ENDPROPERTIES
+              
+              CONTAINER
+                CONTROL TABPAGE
+                  PROPERTIES
+                    Name                #LinesOverview
+                    Width               #Column width
+                    Height              #Column height
+                    Caption             #Overview
+                    HideIfEmpty         #No
+                  ENDPROPERTIES
+                  
+                  CONTAINER
+                    CONTROL GRID
+                      PROPERTIES
+                        Name                #Grid
+                        Width               #Column width
+                        Height              #Column height
+                        DataSource          #ERL_StockOpnameLines
+                      ENDPROPERTIES
+                      
+                        CONTAINER
+                          CONTROL DATEEDIT
+                            PROPERTIES
+                              Name                #ERL_StockOpnameLines_TransDate
+                              AllowEdit           #No
+                              DataSource          #ERL_StockOpnameLines
+                              DataField           #TransDate
+                            ENDPROPERTIES
+                            
+                          ENDCONTROL 
+                          
+                          CONTROL STRINGEDIT
+                            PROPERTIES
+                              Name                #ERL_StockOpnameLines_ItemId
+                              AutoDeclaration     #Yes
+                              AllowEdit           #No
+                              DataSource          #ERL_StockOpnameLines
+                              DataField           #ItemId
+                            ENDPROPERTIES
+                            
+                          ENDCONTROL 
+                          
+                          CONTROL STRINGEDIT
+                            PROPERTIES
+                              Name                #ItemName
+                              DataSource          #ERL_StockOpnameLines
+                              DataMethod          #ItemName
+                            ENDPROPERTIES
+                            
+                          ENDCONTROL 
+                          
+                          CONTROL STRINGEDIT
+                            PROPERTIES
+                              Name                #ERL_StockOpnameLines_ERL_MasterWHID
+                              AllowEdit           #No
+                              DataSource          #ERL_StockOpnameLines
+                              DataField           #ERL_MasterWHID
+                            ENDPROPERTIES
+                            
+                          ENDCONTROL 
+                          
+                          CONTROL STRINGEDIT
+                            PROPERTIES
+                              Name                #ERL_StockOpnameLines_wMSLocationId
+                              AutoDeclaration     #Yes
+                              DataSource          #ERL_StockOpnameLines
+                              DataField           #wMsLocationId
+                            ENDPROPERTIES
+                            
+                            METHODS
+                              Version: 3
+                              SOURCE #lookup
+                                #public void lookup()
+                                #{
+                                #    //super();
+                                #}
+                              ENDSOURCE
+                            ENDMETHODS
+                          ENDCONTROL 
+                          
+                          CONTROL STRINGEDIT
+                            PROPERTIES
+                              Name                #ERL_StockOpnameLines_wMSLocationIdNew
+                              DataSource          #ERL_StockOpnameLines
+                              DataField           #wMSLocationIdNew
+                            ENDPROPERTIES
+                            
+                          ENDCONTROL 
+                          
+                          CONTROL CHECKBOX
+                            PROPERTIES
+                              Name                #ERL_StockOpnameLines_LocationFound
+                              Visible             #No
+                              BackgroundColor     #Window background
+                              DataSource          #ERL_StockOpnameLines
+                              DataField           #LocationFound
+                            ENDPROPERTIES
+                            
+                          ENDCONTROL 
+                          
+                          CONTROL REALEDIT
+                            PROPERTIES
+                              Name                #ERL_StockOpnameLines_PhysicalQty
+                              AutoDeclaration     #Yes
+                              Label               #Counted Quantity
+                              DataSource          #ERL_StockOpnameLines
+                              DataField           #PhysicalQty
+                            ENDPROPERTIES
+                            
+                          ENDCONTROL 
+                          
+                          CONTROL REALEDIT
+                            PROPERTIES
+                              Name                #ERL_StockOpnameLines_Onhand
+                              AllowEdit           #No
+                              Label               #On-hand
+                              DataSource          #ERL_StockOpnameLines
+                              DataMethod          #onhand
+                            ENDPROPERTIES
+                            
+                          ENDCONTROL 
+                          
+                          CONTROL COMBOBOX
+                            PROPERTIES
+                              Name                #ERL_StockOpnameLines_ERL_JournalType
+                              AllowEdit           #No
+                              DataSource          #ERL_StockOpnameLines
+                              DataField           #ERL_JournalStatus
+                            ENDPROPERTIES
+                            
+                          ENDCONTROL 
+                          
+                          CONTROL STRINGEDIT
+                            PROPERTIES
+                              Name                #ERL_StockOpnameLines_AdminId
+                              Visible             #No
+                              AllowEdit           #No
+                              DataSource          #ERL_StockOpnameLines
+                              DataField           #AdminId
+                            ENDPROPERTIES
+                            
+                          ENDCONTROL 
+                          
+                          CONTROL STRINGEDIT
+                            PROPERTIES
+                              Name                #ERL_StockOpnameLines_createdBy
+                              AllowEdit           #No
+                              DataSource          #ERL_StockOpnameLines
+                              DataField           #createdBy
+                            ENDPROPERTIES
+                            
+                          ENDCONTROL 
+                          
+                          CONTROL STRINGEDIT
+                            PROPERTIES
+                              Name                #ERL_StockOpnameLines_ERL_OpnameTagId
+                              AllowEdit           #No
+                              DataSource          #ERL_StockOpnameLines
+                              DataField           #ERL_OpnameTagId
+                            ENDPROPERTIES
+                            
+                          ENDCONTROL 
+                          
+                        ENDCONTAINER
+                        
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+                ENDCONTROL 
+                
+              ENDCONTAINER
+              
+            ENDCONTROL 
+            
+          ENDCONTAINER
+          
+      ENDCONTROL 
+      
+    ENDCONTAINER
+    
+  ENDDESIGN
+  
+ENDFORM
+
+
+***Element: END

@@ -1,0 +1,82 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: DBT
+
+; Microsoft Dynamics AX Table : ERL_OpnameStatus unloaded
+; --------------------------------------------------------------------------------
+  TABLEVERSION 1
+  
+  TABLE #ERL_OpnameStatus
+    PROPERTIES
+      Name                #ERL_OpnameStatus
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #ItemCategoryId
+        STRING
+        PROPERTIES
+          Name                #ItemCategoryId
+          Table               #ERL_OpnameStatus
+          ExtendedDataType    
+            ARRAY 
+              #ItemCategoryId
+              #
+            ENDARRAY
+          StringSize          #15
+        ENDPROPERTIES
+        
+      FIELD #Dimension1
+        STRING
+        PROPERTIES
+          Name                #Dimension1
+          Table               #ERL_OpnameStatus
+          ExtendedDataType    
+            ARRAY 
+              #Dimension1
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #Material
+        REAL
+        PROPERTIES
+          Name                #Material
+          Label               #Selisih Material
+          Table               #ERL_OpnameStatus
+          ExtendedDataType    
+            ARRAY 
+              #ERL_StockCounted
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #NonMaterial
+        REAL
+        PROPERTIES
+          Name                #NonMaterial
+          Label               #Selisih NonMaterial
+          Table               #ERL_OpnameStatus
+          ExtendedDataType    
+            ARRAY 
+              #ERL_StockCounted
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+    ENDGROUPS
+    
+    INDICES
+    ENDINDICES
+    REFERENCES
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+  ENDTABLE
+  
+
+***Element: END

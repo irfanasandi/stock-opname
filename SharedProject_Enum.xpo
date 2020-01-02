@@ -1,0 +1,96 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: DBE
+
+; Microsoft Dynamics AX Enumtype : ERL_JournalStatus unloaded
+; --------------------------------------------------------------------------------
+  ENUMTYPEVERSION 1
+  
+  ENUMTYPE #ERL_JournalStatus
+    PROPERTIES
+      Name                #ERL_JournalStatus
+      Label               #Journal Status
+      UseEnumValue        #Yes
+    ENDPROPERTIES
+    
+    TYPEELEMENTS
+      #None
+      PROPERTIES
+        Name                #None
+        Label               #None
+        EnumValue           #0
+      ENDPROPERTIES
+      
+      #TidakSelisih
+      PROPERTIES
+        Name                #TidakSelisih
+        Label               #Tidak Selisih
+        EnumValue           #1
+      ENDPROPERTIES
+      
+      #NonMateral
+      PROPERTIES
+        Name                #NonMateral
+        Label               #Selisih Non Material
+        EnumValue           #2
+      ENDPROPERTIES
+      
+      #Material
+      PROPERTIES
+        Name                #Material
+        Label               #Selisih Material
+        EnumValue           #3
+      ENDPROPERTIES
+      
+    ENDTYPEELEMENTS
+  ENDENUMTYPE
+  
+
+***Element: DBE
+
+; Microsoft Dynamics AX Enumtype : ERL_StatusOpnameTag unloaded
+; --------------------------------------------------------------------------------
+  ENUMTYPEVERSION 1
+  
+  ENUMTYPE #ERL_StatusOpnameTag
+    PROPERTIES
+      Name                #ERL_StatusOpnameTag
+      Label               #Status
+      UseEnumValue        #Yes
+    ENDPROPERTIES
+    
+    TYPEELEMENTS
+      #Open
+      PROPERTIES
+        Name                #Open
+        Label               #Open
+        EnumValue           #0
+      ENDPROPERTIES
+      
+      #OnProgress
+      PROPERTIES
+        Name                #OnProgress
+        Label               #On Progress
+        EnumValue           #2
+      ENDPROPERTIES
+      
+      #Transferred
+      PROPERTIES
+        Name                #Transferred
+        Label               #Transferred
+        EnumValue           #1
+      ENDPROPERTIES
+      
+      #Cancel
+      PROPERTIES
+        Name                #Cancel
+        Label               #Cancelled
+        EnumValue           #3
+      ENDPROPERTIES
+      
+    ENDTYPEELEMENTS
+  ENDENUMTYPE
+  
+
+***Element: END

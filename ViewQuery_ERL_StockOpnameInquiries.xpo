@@ -1,0 +1,205 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: VIE
+
+; Microsoft Dynamics AX View : ERL_StockOpnameInquiries unloaded
+; --------------------------------------------------------------------------------
+  TABLEVERSION 1
+  
+  VIEW #ERL_StockOpnameInquiries
+    PROPERTIES
+      Name                #ERL_StockOpnameInquiries
+      SaveDataPerCompany  #Yes
+      Query               #ERL_StockOpnameInquiries
+    ENDPROPERTIES
+    
+    QUERY #Metadata
+      PROPERTIES
+        Name                #Metadata
+        Version             #4
+        NextUniqueId        #1001
+      ENDPROPERTIES
+      
+      BLOCKS
+      ENDBLOCKS
+      QUERY #ERL_StockOpnameInquiries
+      ENDQUERY
+      
+    ENDQUERY
+    
+    FIELDS
+      VIEWFIELD #InventSiteId
+        PROPERTIES
+          Name                #InventSiteId
+          Table               #ERL_StockOpnameInquiries
+          ExtendedDataType    #InventSiteId
+          StringSize          #10
+          DataSource          #ERL_OnhandStockOpname_1
+          DataField           #InventSiteId
+        ENDPROPERTIES
+        
+      ENDVIEWFIELD
+      
+      VIEWFIELD #ItemId
+        PROPERTIES
+          Name                #ItemId
+          Table               #ERL_StockOpnameInquiries
+          ExtendedDataType    #ItemId
+          StringSize          #20
+          DataSource          #ERL_OnhandStockOpname_1
+          DataField           #ItemId
+        ENDPROPERTIES
+        
+      ENDVIEWFIELD
+      
+      VIEWFIELD #wMSLocationId
+        PROPERTIES
+          Name                #wMSLocationId
+          Label               #Onhand Location
+          Table               #ERL_StockOpnameInquiries
+          ExtendedDataType    #WMSLocationId
+          StringSize          #10
+          DataSource          #ERL_OnhandStockOpname_1
+          DataField           #wMSLocationId
+        ENDPROPERTIES
+        
+      ENDVIEWFIELD
+      
+      VIEWFIELD #wMsLocationId1
+        PROPERTIES
+          Name                #wMsLocationId1
+          Label               #Counted Location
+          Table               #ERL_StockOpnameInquiries
+          ExtendedDataType    #WMSLocationId
+          StringSize          #10
+          DataSource          #ERL_StockOpnameLines_1
+          DataField           #wMsLocationId
+        ENDPROPERTIES
+        
+      ENDVIEWFIELD
+      
+      VIEWFIELD #SumOfAvailPhysical
+        PROPERTIES
+          Type                #Real
+          Name                #SumOfAvailPhysical
+          Label               #Onhand
+          Table               #ERL_StockOpnameInquiries
+          ExtendedDataType    #InventQtyAvailPhysical
+          StringSize          #(Memo)
+          DataSource          #ERL_OnhandStockOpname_1
+          DataField           #SumOfAvailPhysical
+        ENDPROPERTIES
+        
+      ENDVIEWFIELD
+      
+      VIEWFIELD #PhysicalQty
+        PROPERTIES
+          Type                #Real
+          Name                #PhysicalQty
+          Label               #Counted
+          Table               #ERL_StockOpnameInquiries
+          ExtendedDataType    #ERL_StockCounted
+          StringSize          #(Memo)
+          DataSource          #ERL_StockOpnameLines_1
+          DataField           #PhysicalQty
+        ENDPROPERTIES
+        
+      ENDVIEWFIELD
+      
+      VIEWFIELD #wMSLocationIdNew
+        PROPERTIES
+          Name                #wMSLocationIdNew
+          Label               #Counted Location New
+          Table               #ERL_StockOpnameInquiries
+          ExtendedDataType    #WMSLocationId
+          StringSize          #10
+          DataSource          #ERL_StockOpnameLines_1
+          DataField           #wMSLocationIdNew
+        ENDPROPERTIES
+        
+      ENDVIEWFIELD
+      
+      VIEWFIELD #PeriodeRecId
+        PROPERTIES
+          Type                #Int64
+          Name                #PeriodeRecId
+          Table               #ERL_StockOpnameInquiries
+          ExtendedDataType    #ERL_OpnamePeriodeRecId
+          StringSize          #(Memo)
+          DataSource          #ERL_StockOpname_1
+          DataField           #PeriodeRecId
+        ENDPROPERTIES
+        
+      ENDVIEWFIELD
+      
+      VIEWFIELD #ERL_StatusOpnameTag
+        PROPERTIES
+          Type                #Enum
+          Name                #ERL_StatusOpnameTag
+          Label               #Status Tag
+          Table               #ERL_StockOpnameInquiries
+          EnumType            #ERL_StatusOpnameTag
+          StringSize          #(Memo)
+          DataSource          #ERL_StockOpname_1
+          DataField           #ERL_StatusOpnameTag
+        ENDPROPERTIES
+        
+      ENDVIEWFIELD
+      
+      VIEWFIELD #TransDate
+        PROPERTIES
+          Type                #Date
+          Name                #TransDate
+          Table               #ERL_StockOpnameInquiries
+          ExtendedDataType    #JournalTransDate
+          StringSize          #(Memo)
+          DataSource          #ERL_StockOpnameLines_1
+          DataField           #TransDate
+        ENDPROPERTIES
+        
+      ENDVIEWFIELD
+      
+      VIEWFIELD #OpnameRefrenceId
+        PROPERTIES
+          Name                #OpnameRefrenceId
+          Table               #ERL_StockOpnameInquiries
+          StringSize          #25
+          DataSource          #ERL_StockOpname_1
+          DataField           #OpnameRefrenceId
+        ENDPROPERTIES
+        
+      ENDVIEWFIELD
+      
+      VIEWFIELD #ERL_MasterWHID
+        PROPERTIES
+          Name                #ERL_MasterWHID
+          Table               #ERL_StockOpnameInquiries
+          ExtendedDataType    #ERL_MasterWHID
+          StringSize          #20
+          DataSource          #ERL_StockOpnameLines_1
+          DataField           #ERL_MasterWHID
+        ENDPROPERTIES
+        
+      ENDVIEWFIELD
+      
+      VIEWFIELD #ERL_OpnameTagId
+        PROPERTIES
+          Name                #ERL_OpnameTagId
+          Table               #ERL_StockOpnameInquiries
+          ExtendedDataType    #ERL_OpnameTagId
+          StringSize          #10
+          DataSource          #ERL_StockOpnameLines_1
+          DataField           #ERL_OpnameTagId
+        ENDPROPERTIES
+        
+      ENDVIEWFIELD
+      
+    ENDFIELDS
+    GROUPS
+    ENDGROUPS
+    
+  ENDVIEW
+  
+
+***Element: END

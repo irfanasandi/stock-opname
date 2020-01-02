@@ -1,0 +1,302 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: FRM
+
+; Microsoft Dynamics AX Forms unloaded
+; --------------------------------------------------------------------------------
+FRMVERSION 5
+
+FORM #ERL_StockOpnameNewLoc
+  PROPERTIES
+    Name                #ERL_StockOpnameNewLoc
+  ENDPROPERTIES
+  
+  METHODS
+    Version: 3
+    SOURCE #classDeclaration
+      #public class FormRun extends ObjectRun
+      #{
+      #    QueryBuildDataSource        qbds;
+      #    QueryBuildRange             qbr;
+      #    str                         qstr;
+      #    Dimension1                  bu;
+      #}
+    ENDSOURCE
+    SOURCE #init
+      #public void init()
+      #{
+      #    super();
+      #
+      #    bu = ERL_Global::getUserBU();
+      #
+      #    qbds = ERL_StockOpnameNewLoc_ds.query().dataSourceTable(tablenum(ERL_StockOpnameNewLoc));
+      #    qstr = strfmt('((%1.SumOfAvailPhysical != %2) || (%1.PhysicalQty != %2))', ERL_StockOpnameNewLoc_ds.name(), queryValue(0));
+      #
+      #    qbds.addRange(fieldnum(ERL_StockOpnameNewLoc, recid)).value(qstr);
+      #    qbds.addRange(fieldNum(ERL_StockOpnameNewLoc,InventSiteId)).value(bu);
+      #    qbds.addSortField(fieldnum(ERL_StockOpnameNewLoc, ItemId));
+      #    qbr = qbds.addRange(fieldnum(ERL_StockOpnameNewLoc, ERL_StatusOpnameTag));
+      #}
+    ENDSOURCE
+  ENDMETHODS
+  OBJECTBANK
+    PROPERTIES
+    ENDPROPERTIES
+    
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #ERL_StockOpnameNewLoc
+          Table               #ERL_StockOpnameNewLoc
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+      METHODS
+        Version: 3
+        SOURCE #Grade
+          #Display Description Grade(ERL_StockOpnameNewLoc      _inq)
+          #{
+          #    ;
+          #    return    AGR_GradeItem::find(InventTable::find(_inq.ItemId).AGR_ItemGrade).AGR_GradeName;
+          #}
+        ENDSOURCE
+        SOURCE #ItemName
+          #Display Itemname ItemName(ERL_StockOpnameNewLoc      _inq)
+          #{
+          #    ;
+          #    return    InventTable::find(_inq.ItemId).itemName;
+          #}
+        ENDSOURCE
+        SOURCE #executeQuery
+          #public void executeQuery()
+          #{
+          #    qbr.value(sysQuery::value(StatusTag.valueStr()));
+          #    super();
+          #}
+        ENDSOURCE
+        SOURCE #InventQty
+          #Display InventQty InventQty(ERL_StockOpnameNewLoc     _inq)
+          #{
+          #    return _inq.PhysicalQty - _inq.SumOfAvailPhysical;
+          #}
+        ENDSOURCE
+        SOURCE #Periode
+          #Display Description Periode(ERL_StockOpnameNewLoc        _inq)
+          #{
+          #    ;
+          #   return ERL_OpnamePeriodeEvent::find(_inq.PeriodeRecId).Description;
+          #
+          #}
+        ENDSOURCE
+      ENDMETHODS
+    ENDDATASOURCE
+  ENDOBJECTBANK
+  
+  JOINS
+  ENDJOINS
+  
+  DESIGN
+    PROPERTIES
+      Caption             #Inquiries Stock Opname
+    ENDPROPERTIES
+    
+    CONTAINER
+      CONTROL GROUP
+        PROPERTIES
+          Name                #TopFields
+          Width               #Column width
+          Height              #45
+          FrameType           #None
+          Columns             #Auto
+        ENDPROPERTIES
+        
+          CONTAINER
+            CONTROL COMBOBOX
+              PROPERTIES
+                Name                #StatusTag
+                AutoDeclaration     #Yes
+                Label               #Status
+                EnumType            #ERL_StatusOpnameTag
+              ENDPROPERTIES
+              
+              METHODS
+                Version: 3
+                SOURCE #selectionChange
+                  #public int selectionChange()
+                  #{
+                  #    int ret;
+                  #
+                  #    ret = super();
+                  #
+                  #    ERL_StockOpnameNewLoc_ds.executeQuery();
+                  #    return ret;
+                  #}
+                ENDSOURCE
+              ENDMETHODS
+            ENDCONTROL 
+            
+          ENDCONTAINER
+          
+      ENDCONTROL 
+      
+      CONTROL TAB
+        PROPERTIES
+          Name                #Tab
+          Width               #Column width
+          Height              #Column height
+        ENDPROPERTIES
+        
+        CONTAINER
+          CONTROL TABPAGE
+            PROPERTIES
+              Name                #TabPage
+              Width               #Column width
+              Height              #Column height
+              Caption             #Overview
+            ENDPROPERTIES
+            
+            CONTAINER
+              CONTROL GRID
+                PROPERTIES
+                  Name                #Grid
+                  Width               #Column width
+                  Height              #Column height
+                  DataSource          #ERL_StockOpnameNewLoc
+                ENDPROPERTIES
+                
+                  CONTAINER
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #ERL_StockOpnameNewLoc_InventSiteId
+                        DataSource          #ERL_StockOpnameNewLoc
+                        DataField           #InventSiteId
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #ERL_StockOpnameNewLoc_ItemId
+                        DataSource          #ERL_StockOpnameNewLoc
+                        DataField           #ItemId
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #ItemName
+                        Label               #Item Name
+                        DataSource          #ERL_StockOpnameNewLoc
+                        DataMethod          #ItemName
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #Grade
+                        Label               #Grade
+                        DataSource          #ERL_StockOpnameNewLoc
+                        DataMethod          #Grade
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #ERL_StockOpnameNewLoc_wMSLocationId
+                        DataSource          #ERL_StockOpnameNewLoc
+                        DataField           #wMSLocationId
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL REALEDIT
+                      PROPERTIES
+                        Name                #ERL_StockOpnameNewLoc_SumOfAvailPhysical
+                        DataSource          #ERL_StockOpnameNewLoc
+                        DataField           #SumOfAvailPhysical
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #ERL_StockOpnameNewLoc_wMSLocationIdNew
+                        DataSource          #ERL_StockOpnameNewLoc
+                        DataField           #wMSLocationIdNew
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL REALEDIT
+                      PROPERTIES
+                        Name                #ERL_StockOpnameNewLoc_PhysicalQty
+                        DataSource          #ERL_StockOpnameNewLoc
+                        DataField           #PhysicalQty
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL REALEDIT
+                      PROPERTIES
+                        Name                #InventQty
+                        Label               #Invent Qty
+                        DataSource          #ERL_StockOpnameNewLoc
+                        DataMethod          #InventQty
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #Periode
+                        Label               #Periode
+                        DataSource          #ERL_StockOpnameNewLoc
+                        DataMethod          #Periode
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #ERL_StockOpnameNewLoc_OpnameRefrenceId
+                        DataSource          #ERL_StockOpnameNewLoc
+                        DataField           #OpnameRefrenceId
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #ERL_StockOpnameNewLoc_ERL_OpnameTagId
+                        DataSource          #ERL_StockOpnameNewLoc
+                        DataField           #ERL_OpnameTagId
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+            ENDCONTAINER
+            
+          ENDCONTROL 
+          
+        ENDCONTAINER
+        
+      ENDCONTROL 
+      
+    ENDCONTAINER
+    
+  ENDDESIGN
+  
+ENDFORM
+
+
+***Element: END

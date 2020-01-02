@@ -1,0 +1,22 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: FTM
+
+; Microsoft Dynamics AX MENUITEM : ERL_ReleaseItem unloaded
+; --------------------------------------------------------------------------------
+  VERSION 1
+  
+  MENUITEM #ERL_ReleaseItem
+    Type: 3
+    PROPERTIES
+      Name                #ERL_ReleaseItem
+      Label               #Release
+      ObjectType          #Class
+      Object              #ERL_ReleaseItem
+    ENDPROPERTIES
+    
+  ENDMENUITEM
+  
+
+***Element: END

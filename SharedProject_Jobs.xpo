@@ -1,0 +1,119 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: JOB
+
+; Microsoft Dynamics AX Job: UpdateLines unloaded
+; --------------------------------------------------------------------------------
+  JOBVERSION 1
+  
+  SOURCE #UpdateLines
+    #static void UpdateLines(Args _args)
+    #{
+    #    ERL_stockOpname         header;
+    #    ERL_StockOpnameLines    lines;
+    #    ;
+    #
+    #
+    #    update_recordset lines setting ERL_JournalStatus = erl_journalstatus::None;
+    #    update_recordset header setting ERL_StatusOpnameTag = erl_StatusOpnametag::Open;
+    #
+    #}
+  ENDSOURCE
+
+***Element: JOB
+
+; Microsoft Dynamics AX Job: EnumValues unloaded
+; --------------------------------------------------------------------------------
+  JOBVERSION 1
+  
+  SOURCE #EnumValues
+    #static void EnumValues(Args _args)
+    #{
+    #    erl_journalstatus   status;
+    #    DictEnum enum = new DictEnum(status);
+    #    int i;
+    #    ;
+    #
+    #    for(i = 0; i < enum.values(); i++)
+    #    {
+    #        info(strFmt("%1-%2", enum.index2Label(i), enum.index2value(i)));
+    #    }
+    #
+    #
+    #}
+  ENDSOURCE
+
+***Element: JOB
+
+; Microsoft Dynamics AX Job: createJour unloaded
+; --------------------------------------------------------------------------------
+  JOBVERSION 1
+  
+  SOURCE #createJour
+    #static void createJour(Args _args)
+    #{
+    #    ERL_StockOpnameTemp     temp, Material, nonMaterial, tdkSelisih;
+    #    CopyOfInventJournalTable      ijTable;
+    #    inventJournalTrans      ijTrans;
+    #    inventDimParm           iDimParm;
+    #    inventDim               iDim;
+    #    Dimension1              bu;
+    #    InventJournalNameId     name;
+    #    ;
+    #
+    #    bu = sysuserinfo::find(curuserid()).Dimension1;
+    #    name = strfmt("%1-OP", bu);
+    #    select firstfast firstonly temp where temp.createdBy == curuserid()
+    #        && temp.ERL_JournalType == erl_journaltype::NonMateral;
+    #    if(temp) {
+    #        info(strfmt('%1, %2-Non Material',inventJournalname::find(name).Description, temp.ERL_OpnamePeriodeId));
+    #        info(name);
+    #        info(strfmt('%1', inventJournalname::find(name).JournalType));
+    #    }
+    #
+    #    select firstfast firstonly temp where temp.createdBy == curuserid()
+    #        && temp.ERL_JournalType == erl_journaltype::Material;
+    #    if(temp){
+    #        info(strfmt("Material"));
+    #    }
+    #
+    #    select firstfast firstonly temp where temp.createdBy == curuserid()
+    #        && temp.ERL_JournalType == erl_journaltype::TidakSelisih;
+    #    if(temp)
+    #        info(strfmt("Tidak Selisih"));
+    #
+    #}
+  ENDSOURCE
+
+***Element: JOB
+
+; Microsoft Dynamics AX Job: Job2 unloaded
+; --------------------------------------------------------------------------------
+  JOBVERSION 1
+  
+  SOURCE #Job2
+    #static void Job2(Args _args)
+    #{
+    #    Query                   q = new Query();
+    #    queryrun                qr;
+    #    queryBuildDataSource    qbds;
+    #    QueryBuildRange          qbr;
+    #    ERL_StockOpname         sop;
+    #    InventJournalName       jurname;
+    #    int rounded;
+    #    ;
+    #
+    #
+    #    //rounded = round(210.322, 0);
+    #    rounded = roundupdec(2105.4558,0);
+    #
+    #    info(strfmt('%1', rounded));
+    #//    qbds = q.addDataSource(tablenum(ERL_StockOpname));
+    #//    qbds.addGroupByField(fieldnum(ERL_stockopname, erl_stockopnametag));
+    #//    qr = new QueryRun(q);
+    #
+    #}
+  ENDSOURCE
+
+***Element: END

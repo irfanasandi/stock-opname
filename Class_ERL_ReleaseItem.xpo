@@ -1,0 +1,66 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: ERL_ReleaseItem unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #ERL_ReleaseItem
+    PROPERTIES
+      Name                #ERL_ReleaseItem
+      Extends             #
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #classDeclaration
+        #class ERL_ReleaseItem
+        #{
+        #    args                    args;
+        #    ERL_ReleaseItemCounted      record;
+        #}
+      ENDSOURCE
+      SOURCE #parmArgs
+        #public Args parmArgs(args _args=args)
+        #{
+        #    ;
+        #    args = _args;
+        #
+        #    return args;
+        #
+        #}
+      ENDSOURCE
+      SOURCE #unthickItem
+        #public void unthickItem()
+        #{
+        #    InventItemLocation      inv;
+        #    ;
+        #
+        #    record = args.record();
+        #    if(record.Posted) {
+        #        update_recordset inv
+        #        setting CountingStarted = 0, CountingJournalId = ""
+        #        where inv.CountingJournalId == record.CountingJournalId;
+        #        info(strfmt("Jurnal %1 sukses di rilis.", record.CountingJournalId));
+        #        args.caller().refresh();
+        #    } else {
+        #        warning("Jurnal masih belum di posting");
+        #    }
+        #
+        #}
+      ENDSOURCE
+      SOURCE #main
+        #public static void main(Args args)
+        #{
+        #    ERL_ReleaseItem   cls = new ERL_ReleaseItem();
+        #    cls.parmArgs(args);
+        #    cls.unthickItem();
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: END

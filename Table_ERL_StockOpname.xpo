@@ -1,0 +1,221 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: DBT
+
+; Microsoft Dynamics AX Table : ERL_StockOpname unloaded
+; --------------------------------------------------------------------------------
+  TABLEVERSION 1
+  
+  TABLE #ERL_StockOpname
+    PROPERTIES
+      Name                #ERL_StockOpname
+      CreatedDateTime     #Yes
+      CreatedBy           #Yes
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #OpnameRefrenceId
+        STRING
+        PROPERTIES
+          Name                #OpnameRefrenceId
+          Label               #Refrence Id
+          Table               #ERL_StockOpname
+          StringSize          #25
+        ENDPROPERTIES
+        
+      FIELD #ERL_StatusOpnameTag
+        ENUM
+        PROPERTIES
+          Name                #ERL_StatusOpnameTag
+          Table               #ERL_StockOpname
+          EnumType            #ERL_StatusOpnameTag
+        ENDPROPERTIES
+        
+      FIELD #InventSiteId
+        STRING
+        PROPERTIES
+          Name                #InventSiteId
+          Table               #ERL_StockOpname
+          ExtendedDataType    
+            ARRAY 
+              #InventSiteId
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #PeriodeRecId
+        INT64
+        PROPERTIES
+          Name                #PeriodeRecId
+          Table               #ERL_StockOpname
+          ExtendedDataType    
+            ARRAY 
+              #ERL_OpnamePeriodeRecId
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #GroupRecId
+        INT64
+        PROPERTIES
+          Name                #GroupRecId
+          Table               #ERL_StockOpname
+          ExtendedDataType    
+            ARRAY 
+              #ERL_OpnameGroupRecId
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #Dimension
+        STRING
+        PROPERTIES
+          Name                #Dimension
+          Table               #ERL_StockOpname
+          ExtendedDataType    
+            ARRAY 
+              #Dimension
+              #
+            ENDARRAY
+          StringSize          #15
+        ENDPROPERTIES
+        
+      FIELD #TagNumberStart
+        INT
+        PROPERTIES
+          Name                #TagNumberStart
+          Table               #ERL_StockOpname
+          ExtendedDataType    
+            ARRAY 
+              #ERL_OpnameTagNum
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #TagNumberEnd
+        INT
+        PROPERTIES
+          Name                #TagNumberEnd
+          Table               #ERL_StockOpname
+          ExtendedDataType    
+            ARRAY 
+              #ERL_OpnameTagNum
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #Year
+        INT
+        PROPERTIES
+          Name                #Year
+          Table               #ERL_StockOpname
+          ExtendedDataType    
+            ARRAY 
+              #Yr
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+      GROUP #Overview
+        PROPERTIES
+          Name                #Overview
+        ENDPROPERTIES
+        
+        GROUPFIELDS
+          #OpnameRefrenceId
+          #ERL_StatusOpnameTag
+          #InventSiteId
+        ENDGROUPFIELDS
+      ENDGROUP
+    ENDGROUPS
+    
+    INDICES
+      #TagNumberIdx
+      PROPERTIES
+        Name                #TagNumberIdx
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #TagNumberStart
+        #TagNumberEnd
+      ENDINDEXFIELDS
+      
+      #PeriodeIdx
+      PROPERTIES
+        Name                #PeriodeIdx
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #PeriodeRecId
+      ENDINDEXFIELDS
+      
+      #GroupIdx
+      PROPERTIES
+        Name                #GroupIdx
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #GroupRecId
+      ENDINDEXFIELDS
+      
+      #StatusOpnameIdx
+      PROPERTIES
+        Name                #StatusOpnameIdx
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #ERL_StatusOpnameTag
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    REFERENCES
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+    METHODS
+      Version: 3
+      SOURCE #ERL_OpnameUserGroup
+        #ERL_OpnameUserGroup ERL_OpnameUserGroup(ERl_OpnameGroupRecId recId = this.GroupRecId)
+        #{
+        #   return ERL_OpnameUserGroup::find(recId);
+        #}
+      ENDSOURCE
+      SOURCE #GroupDesc
+        #Display Description GroupDesc()
+        #{
+        #    return this.ERL_OpnameUserGroup().Description;
+        #}
+      ENDSOURCE
+      SOURCE #Periode
+        #Display Description Periode()
+        #{
+        #    ;
+        #    return ERL_OpnamePeriodeEvent::find(this.PeriodeRecId).Description;
+        #}
+      ENDSOURCE
+      SOURCE #find
+        #static ERL_StockOpname find(ERL_OpnameRefrenceId      refId)
+        #{
+        #    ERL_StockOpname  ERL_StockOpname;
+        #    ;
+        #
+        #    if (refId)
+        #    {
+        #        select firstonly ERL_StockOpname
+        #            where ERL_StockOpname.OpnameRefrenceId == refId;
+        #    }
+        #
+        #    return ERL_StockOpname;
+        #}
+        #
+      ENDSOURCE
+    ENDMETHODS
+  ENDTABLE
+  
+
+***Element: END

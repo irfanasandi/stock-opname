@@ -1,0 +1,227 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: FRM
+
+; Microsoft Dynamics AX Forms unloaded
+; --------------------------------------------------------------------------------
+FRMVERSION 5
+
+FORM #ERL_OnhandStockOpname
+  PROPERTIES
+    Name                #ERL_OnhandStockOpname
+  ENDPROPERTIES
+  
+  METHODS
+    Version: 3
+    SOURCE #classDeclaration
+      #public class FormRun extends ObjectRun
+      #{
+      #    ERL_StockOpnameLines    lines;
+      #    QueryBuildDataSource    qbds;
+      #    Dimension1              bu;
+      #    ERL_WHStockOpname       wh;
+      #}
+    ENDSOURCE
+    SOURCE #init
+      #public void init()
+      #{
+      #
+      #    super();
+      #    lines = element.args().record();
+      #
+      #    bu = SysuserInfo::find(curuserid()).Dimension1;
+      #
+      #
+      #    if(lines)
+      #    {
+      #        qbds = ERL_OnhandStockOpname_ds.query().dataSourceTable(tablenum(ERL_OnhandStockOpname));
+      #        qbds.addRange(fieldnum(ERL_OnhandStockOpname, itemid)).value(sysquery::value(lines.ItemId));
+      #        qbds.addRange(fieldnum(ERL_OnhandStockOpname, InventSiteid)).value(sysquery::value(bu));
+      #    }
+      #//    else
+      #//    {
+      #//        throw error(strfmt("@SYS22678", 'Onhand'));
+      #//    }
+      #
+      #}
+    ENDSOURCE
+  ENDMETHODS
+  OBJECTBANK
+    PROPERTIES
+    ENDPROPERTIES
+    
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #ERL_OnhandStockOpname
+          Table               #ERL_OnhandStockOpname
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+      METHODS
+        Version: 3
+        SOURCE #init
+          #public void init()
+          #{
+          #    super();
+          #    this.query().dataSourceTable(tablenum(ERL_OnhandStockOpname))
+          #        .addOrderByField(fieldnum(ERL_OnhandStockOpname, SumOfAvailPhysical), sortOrder::Descending);
+          #}
+        ENDSOURCE
+        SOURCE #dCalc
+          #Display InventQty dCalc(ERL_OnhandStockOpname _onhand)
+          #{
+          #    ;
+          #    return this.dCount(_onhand) - _onhand.SumOfAvailPhysical;
+          #}
+        ENDSOURCE
+        SOURCE #dCount
+          #Display ERL_StockCounted dCount(ERL_OnhandStockOpname     _onhand)
+          #{
+          #    ERL_StockOpnameLines        _lines;
+          #    ERL_WHStockOpname           whStockOpname;
+          #    ;
+          #
+          #    lines = element.args().record();
+          #
+          #    select firstfast firstonly whStockOpname where whstockOpname.InventSiteId == _onhand.InventSiteId;
+          #
+          #    select * from _lines where _lines.ItemId == _onhand.ItemId && lines.ERL_MasterWHID == whStockOpname.ERL_MasterWHID
+          #        && _lines.wMsLocationId == _onhand.wMSLocationId && _lines.OpnameRefrenceId == lines.OpnameRefrenceId;
+          #
+          #    if(_lines)
+          #        return _lines.PhysicalQty;
+          #    else
+          #        return 0;
+          #
+          #}
+        ENDSOURCE
+      ENDMETHODS
+    ENDDATASOURCE
+  ENDOBJECTBANK
+  
+  JOINS
+  ENDJOINS
+  
+  DESIGN
+    PROPERTIES
+      Caption             #Onhand Stock Opname
+    ENDPROPERTIES
+    
+    CONTAINER
+      CONTROL TAB
+        PROPERTIES
+          Name                #Tab
+          Width               #Column width
+          Height              #Column height
+        ENDPROPERTIES
+        
+        CONTAINER
+          CONTROL TABPAGE
+            PROPERTIES
+              Name                #Onhand
+              Caption             #Onhand
+            ENDPROPERTIES
+            
+            CONTAINER
+              CONTROL GRID
+                PROPERTIES
+                  Name                #Grid
+                  Width               #Column width
+                  Height              #Column height
+                  DataSource          #ERL_OnhandStockOpname
+                ENDPROPERTIES
+                
+                METHODS
+                  Version: 3
+                  SOURCE #dCalcQty
+                    #Display Qty dCalcQty()
+                    #{
+                    #    ;
+                    #    return  PhysicalQty.realValue() - ERL_OnhandStockOpname_SumOfAvailPhysical.realValue();
+                    #}
+                  ENDSOURCE
+                ENDMETHODS
+                  CONTAINER
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #ERL_OnhandStockOpname_ItemId
+                        DataSource          #ERL_OnhandStockOpname
+                        DataField           #ItemId
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #ERL_OnhandStockOpname_InventSiteId
+                        DataSource          #ERL_OnhandStockOpname
+                        DataField           #InventSiteId
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #ERL_OnhandStockOpname_wMSLocationId
+                        AutoDeclaration     #Yes
+                        DataSource          #ERL_OnhandStockOpname
+                        DataField           #wMSLocationId
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL REALEDIT
+                      PROPERTIES
+                        Name                #ERL_OnhandStockOpname_SumOfAvailPhysical
+                        AutoDeclaration     #Yes
+                        DataSource          #ERL_OnhandStockOpname
+                        DataField           #SumOfAvailPhysical
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL REALEDIT
+                      PROPERTIES
+                        Name                #PhysicalQty
+                        AutoDeclaration     #Yes
+                        Label               #Counted Quantity
+                        DataSource          #ERL_OnhandStockOpname
+                        DataMethod          #dCount
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL REALEDIT
+                      PROPERTIES
+                        Name                #InventQty
+                        Label               #Invent Quantity
+                        DataSource          #ERL_OnhandStockOpname
+                        DataMethod          #dCalc
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+            ENDCONTAINER
+            
+          ENDCONTROL 
+          
+        ENDCONTAINER
+        
+      ENDCONTROL 
+      
+    ENDCONTAINER
+    
+  ENDDESIGN
+  
+ENDFORM
+
+
+***Element: END

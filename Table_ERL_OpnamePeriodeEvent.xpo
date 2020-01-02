@@ -1,0 +1,145 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: DBT
+
+; Microsoft Dynamics AX Table : ERL_OpnamePeriodeEvent unloaded
+; --------------------------------------------------------------------------------
+  TABLEVERSION 1
+  
+  TABLE #ERL_OpnamePeriodeEvent
+    PROPERTIES
+      Name                #ERL_OpnamePeriodeEvent
+      Label               #Opname Periode Event
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #Description
+        STRING
+        PROPERTIES
+          Name                #Description
+          Label               #Desc
+          Table               #ERL_OpnamePeriodeEvent
+          StringSize          #50
+        ENDPROPERTIES
+        
+      FIELD #FromDate
+        DATE
+        PROPERTIES
+          Name                #FromDate
+          Label               #From Date
+          Mandatory           #Yes
+          Table               #ERL_OpnamePeriodeEvent
+          ExtendedDataType    
+            ARRAY 
+              #JournalTransDate
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #ToDate
+        DATE
+        PROPERTIES
+          Name                #ToDate
+          Label               #To Date
+          Mandatory           #Yes
+          Table               #ERL_OpnamePeriodeEvent
+          ExtendedDataType    
+            ARRAY 
+              #JournalTransDate
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #Dimension
+        STRING
+        PROPERTIES
+          Name                #Dimension
+          Table               #ERL_OpnamePeriodeEvent
+          ExtendedDataType    
+            ARRAY 
+              #Dimension
+              #
+            ENDARRAY
+          StringSize          #15
+        ENDPROPERTIES
+        
+      FIELD #PeriodeEventStatus
+        ENUM
+        PROPERTIES
+          Name                #PeriodeEventStatus
+          Table               #ERL_OpnamePeriodeEvent
+          EnumType            #ERL_OpnamePeriodeEventStatus
+        ENDPROPERTIES
+        
+      FIELD #Sampling
+        ENUM
+        PROPERTIES
+          Name                #Sampling
+          Table               #ERL_OpnamePeriodeEvent
+          ExtendedDataType    
+            ARRAY 
+              #NoYesId
+              #
+            ENDARRAY
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+      GROUP #AutoLookup
+        PROPERTIES
+          Name                #AutoLookup
+        ENDPROPERTIES
+        
+        GROUPFIELDS
+          #Description
+          #FromDate
+          #ToDate
+          #Dimension
+          #PeriodeEventStatus
+        ENDGROUPFIELDS
+      ENDGROUP
+    ENDGROUPS
+    
+    INDICES
+      #DateIdx
+      PROPERTIES
+        Name                #DateIdx
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #FromDate
+        #ToDate
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    REFERENCES
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+    METHODS
+      Version: 3
+      SOURCE #find
+        #static ERL_OpnamePeriodeEvent find(ERL_OpnamePeriodeRecId      recId)
+        #{
+        #    ERL_OpnamePeriodeEvent  ERL_OpnamePeriodeEvent;
+        #    ;
+        #
+        #    if (recId)
+        #    {
+        #        select firstonly ERL_OpnamePeriodeEvent
+        #            where ERL_OpnamePeriodeEvent.RecId == recId;
+        #    }
+        #
+        #    return ERL_OpnamePeriodeEvent;
+        #}
+        #
+      ENDSOURCE
+    ENDMETHODS
+  ENDTABLE
+  
+
+***Element: END

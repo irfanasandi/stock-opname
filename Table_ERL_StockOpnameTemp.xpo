@@ -1,0 +1,260 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: DBT
+
+; Microsoft Dynamics AX Table : ERL_StockOpnameTemp unloaded
+; --------------------------------------------------------------------------------
+  TABLEVERSION 1
+  
+  TABLE #ERL_StockOpnameTemp
+    PROPERTIES
+      Name                #ERL_StockOpnameTemp
+      CreatedBy           #Yes
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #ItemId
+        STRING
+        PROPERTIES
+          Name                #ItemId
+          Mandatory           #Yes
+          Table               #ERL_StockOpnameTemp
+          ExtendedDataType    
+            ARRAY 
+              #ItemId
+              #
+            ENDARRAY
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #PhysicalQty
+        REAL
+        PROPERTIES
+          Name                #PhysicalQty
+          Label               #Quantitiy Android
+          Table               #ERL_StockOpnameTemp
+          ExtendedDataType    
+            ARRAY 
+              #Qty
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #ERL_MasterWHID
+        STRING
+        PROPERTIES
+          Name                #ERL_MasterWHID
+          Table               #ERL_StockOpnameTemp
+          ExtendedDataType    
+            ARRAY 
+              #ERL_MasterWHID
+              #
+            ENDARRAY
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #AdminId
+        STRING
+        PROPERTIES
+          Name                #AdminId
+          Label               #Admin Id
+          Table               #ERL_StockOpnameTemp
+          ExtendedDataType    
+            ARRAY 
+              #EmplId
+              #
+            ENDARRAY
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #wMSLocationId
+        STRING
+        PROPERTIES
+          Name                #wMSLocationId
+          Table               #ERL_StockOpnameTemp
+          ExtendedDataType    
+            ARRAY 
+              #WMSLocationId
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #ERL_JournalStatus
+        ENUM
+        PROPERTIES
+          Name                #ERL_JournalStatus
+          Table               #ERL_StockOpnameTemp
+          EnumType            #ERL_JournalStatus
+        ENDPROPERTIES
+        
+      FIELD #OpnameRefrenceId
+        STRING
+        PROPERTIES
+          Name                #OpnameRefrenceId
+          Label               #Refrence Id
+          Table               #ERL_StockOpnameTemp
+          StringSize          #25
+        ENDPROPERTIES
+        
+      FIELD #ERL_OpnameTagId
+        STRING
+        PROPERTIES
+          Name                #ERL_OpnameTagId
+          Table               #ERL_StockOpnameTemp
+          ExtendedDataType    
+            ARRAY 
+              #ERL_OpnameTagId
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #TransDate
+        DATE
+        PROPERTIES
+          Name                #TransDate
+          Mandatory           #Yes
+          Table               #ERL_StockOpnameTemp
+          ExtendedDataType    
+            ARRAY 
+              #JournalTransDate
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #InventQty
+        REAL
+        PROPERTIES
+          Name                #InventQty
+          Label               #Quantitiy Android
+          Table               #ERL_StockOpnameTemp
+          ExtendedDataType    
+            ARRAY 
+              #Qty
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #InventTransId
+        STRING
+        PROPERTIES
+          Name                #InventTransId
+          Table               #ERL_StockOpnameTemp
+          ExtendedDataType    
+            ARRAY 
+              #InventTransId
+              #
+            ENDARRAY
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #InventDimId
+        STRING
+        PROPERTIES
+          Name                #InventDimId
+          Table               #ERL_StockOpnameTemp
+          ExtendedDataType    
+            ARRAY 
+              #InventDimId
+              #
+            ENDARRAY
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #OpnamePeriode
+        STRING
+        PROPERTIES
+          Name                #OpnamePeriode
+          Label               #Opname Periode
+          Table               #ERL_StockOpnameTemp
+          StringSize          #50
+        ENDPROPERTIES
+        
+      FIELD #Dimension
+        STRING
+        PROPERTIES
+          Name                #Dimension
+          Table               #ERL_StockOpnameTemp
+          ExtendedDataType    
+            ARRAY 
+              #Dimension
+              #
+            ENDARRAY
+          StringSize          #15
+        ENDPROPERTIES
+        
+      FIELD #InventOnHand
+        REAL
+        PROPERTIES
+          Name                #InventOnHand
+          HelpText            #@SYS4957
+          Table               #ERL_StockOpnameTemp
+          ExtendedDataType    
+            ARRAY 
+              #InventQtyOnHand
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+      GROUP #Overview
+        PROPERTIES
+          Name                #Overview
+        ENDPROPERTIES
+        
+        GROUPFIELDS
+          #ItemId
+          #PhysicalQty
+          #ERL_MasterWHID
+          #AdminId
+          #wMSLocationId
+          #ERL_JournalStatus
+        ENDGROUPFIELDS
+      ENDGROUP
+    ENDGROUPS
+    
+    INDICES
+      #ItemIdIdx
+      PROPERTIES
+        Name                #ItemIdIdx
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+      ENDINDEXFIELDS
+      
+      #ERL_MasterWhIDx
+      PROPERTIES
+        Name                #ERL_MasterWhIDx
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #ERL_MasterWHID
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    REFERENCES
+      REFERENCE #ERL_StockOpname
+        PROPERTIES
+          Name                #ERL_StockOpname
+          Table               #ERL_StockOpname
+        ENDPROPERTIES
+        
+        FIELDREFERENCES
+          REFERENCETYPE NORMAL
+          PROPERTIES
+            Field               #OpnameRefrenceId
+            RelatedField        #OpnameRefrenceId
+          ENDPROPERTIES
+          
+        ENDFIELDREFERENCES
+      ENDREFERENCE
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+  ENDTABLE
+  
+
+***Element: END

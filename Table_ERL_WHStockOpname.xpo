@@ -1,0 +1,106 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: DBT
+
+; Microsoft Dynamics AX Table : ERL_WHStockOpname unloaded
+; --------------------------------------------------------------------------------
+  TABLEVERSION 1
+  
+  TABLE #ERL_WHStockOpname
+    PROPERTIES
+      Name                #ERL_WHStockOpname
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #InventLocationId
+        STRING
+        PROPERTIES
+          Name                #InventLocationId
+          Mandatory           #Yes
+          AllowEdit           #No
+          Table               #ERL_WHStockOpname
+          ExtendedDataType    
+            ARRAY 
+              #InventLocationId
+              #
+            ENDARRAY
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #InventSiteId
+        STRING
+        PROPERTIES
+          Name                #InventSiteId
+          Table               #ERL_WHStockOpname
+          ExtendedDataType    
+            ARRAY 
+              #InventSiteId
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #ERL_MasterWHID
+        STRING
+        PROPERTIES
+          Name                #ERL_MasterWHID
+          Table               #ERL_WHStockOpname
+          ExtendedDataType    
+            ARRAY 
+              #ERL_MasterWHID
+              #
+            ENDARRAY
+          StringSize          #20
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+      GROUP #AutoLookup
+        PROPERTIES
+          Name                #AutoLookup
+        ENDPROPERTIES
+        
+        GROUPFIELDS
+          #InventLocationId
+          #InventSiteId
+          #ERL_MasterWHID
+        ENDGROUPFIELDS
+      ENDGROUP
+    ENDGROUPS
+    
+    INDICES
+      #MasterWHIdx
+      PROPERTIES
+        Name                #MasterWHIdx
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #ERL_MasterWHID
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    REFERENCES
+      REFERENCE #OnhandStockOpname
+        PROPERTIES
+          Name                #OnhandStockOpname
+          Table               #ERL_OnhandStockOpname
+        ENDPROPERTIES
+        
+        FIELDREFERENCES
+          REFERENCETYPE NORMAL
+          PROPERTIES
+            Field               #InventSiteId
+            RelatedField        #InventSiteId
+          ENDPROPERTIES
+          
+        ENDFIELDREFERENCES
+      ENDREFERENCE
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+  ENDTABLE
+  
+
+***Element: END

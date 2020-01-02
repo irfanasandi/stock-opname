@@ -1,0 +1,175 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: QUE
+
+; Microsoft Dynamics AX Query: ERL_StockOpnameInquiries unloaded
+; --------------------------------------------------------------------------------
+VERSION 18
+
+QUERY #ERL_StockOpnameInquiries
+  PROPERTIES
+    Name                #ERL_StockOpnameInquiries
+    Version             #366
+    NextUniqueId        #1024
+  ENDPROPERTIES
+  
+  METHODS
+    Version: 3
+    SOURCE #classDeclaration
+      #public class QueryRun extends ObjectRun
+      #{
+      #}
+    ENDSOURCE
+  ENDMETHODS
+  BLOCKS
+    BLOCK #ERL_OnhandStockOpname
+      PROPERTIES
+        Name                #ERL_OnhandStockOpname_1
+        Table               #ERL_OnhandStockOpname
+        UniqueId            #1018
+      ENDPROPERTIES
+      
+      FIELDLIST
+        PROPERTIES
+        ENDPROPERTIES
+        
+      ENDFIELDLIST
+      SORTING
+      ENDSORTING
+      LINES
+        LINE #InventSiteId
+        PROPERTIES
+          Name                #InventSiteId
+          Table               #ERL_OnhandStockOpname
+          Field               #InventSiteId
+        ENDPROPERTIES
+        
+      ENDLINES
+      BLOCKS
+        BLOCK #ERL_StockOpnameLines
+          PROPERTIES
+            Name                #ERL_StockOpnameLines_1
+            Table               #ERL_StockOpnameLines
+            UniqueId            #1019
+            JoinMode            #OuterJoin
+          ENDPROPERTIES
+          
+          FIELDLIST
+            PROPERTIES
+            ENDPROPERTIES
+            
+          ENDFIELDLIST
+          SORTING
+          ENDSORTING
+          LINES
+          ENDLINES
+          BLOCKS
+            BLOCK #ERL_StockOpname
+              PROPERTIES
+                Name                #ERL_StockOpname_1
+                Table               #ERL_StockOpname
+                UniqueId            #1021
+                JoinMode            #OuterJoin
+              ENDPROPERTIES
+              
+              FIELDLIST
+                PROPERTIES
+                ENDPROPERTIES
+                
+              ENDFIELDLIST
+              SORTING
+              ENDSORTING
+              LINES
+              ENDLINES
+              BLOCKS
+                BLOCK #ERL_WHStockOpname
+                  PROPERTIES
+                    Name                #ERL_WHStockOpname_1
+                    Table               #ERL_WHStockOpname
+                    UniqueId            #1023
+                    FirstOnly           #Yes
+                    FetchMode           #1:1
+                    Relations           #Yes
+                  ENDPROPERTIES
+                  
+                  FIELDLIST
+                    PROPERTIES
+                    ENDPROPERTIES
+                    
+                  ENDFIELDLIST
+                  SORTING
+                  ENDSORTING
+                  LINES
+                  ENDLINES
+                  BLOCKS
+                  ENDBLOCKS
+                  ASSOCIATIONS
+                  ENDASSOCIATIONS
+                ENDBLOCK
+              ENDBLOCKS
+              ASSOCIATIONS
+                ASSOCIATION
+                  JOINDATASOURCE #ERL_StockOpnameLines_1
+                  MASTERFIELD  #OpnameRefrenceId
+                  DETAILSFIELD #OpnameRefrenceId
+              ENDASSOCIATIONS
+            ENDBLOCK
+          ENDBLOCKS
+          ASSOCIATIONS
+            ASSOCIATION
+              JOINDATASOURCE #ERL_OnhandStockOpname_1
+              MASTERFIELD  #wMSLocationId
+              DETAILSFIELD #wMsLocationId
+            ASSOCIATION
+              JOINDATASOURCE #ERL_OnhandStockOpname_1
+              MASTERFIELD  #ItemId
+              DETAILSFIELD #ItemId
+          ENDASSOCIATIONS
+        ENDBLOCK
+      ENDBLOCKS
+      GROUPBY
+        FIELD
+          PROPERTIES
+            DataSource          #ERL_OnhandStockOpname_1
+            Field               #InventSiteId
+          ENDPROPERTIES
+          
+        FIELD
+          PROPERTIES
+            DataSource          #ERL_OnhandStockOpname_1
+            Field               #ItemId
+          ENDPROPERTIES
+          
+        FIELD
+          PROPERTIES
+            DataSource          #ERL_OnhandStockOpname_1
+            Field               #wMSLocationId
+          ENDPROPERTIES
+          
+      ENDGROUPBY
+      ORDERBY
+        FIELD
+          PROPERTIES
+            DataSource          #ERL_OnhandStockOpname_1
+            Field               #ItemId
+          ENDPROPERTIES
+          
+      ENDORDERBY
+    ENDBLOCK
+  ENDBLOCKS
+  DEPENDENTS
+    DEPENDENT
+      PROPERTIES
+        Name                #ERL_StockOpnameInquiries
+        DependentType       #View
+      ENDPROPERTIES
+      
+      Id 51461
+  ENDDEPENDENTS
+  COMPOSITEQUERIES
+  ENDCOMPOSITEQUERIES
+ENDQUERY
+
+
+***Element: END

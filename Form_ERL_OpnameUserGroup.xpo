@@ -1,0 +1,550 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: FRM
+
+; Microsoft Dynamics AX Forms unloaded
+; --------------------------------------------------------------------------------
+FRMVERSION 5
+
+FORM #ERL_OpnameUserGroup
+  PROPERTIES
+    Name                #ERL_OpnameUserGroup
+  ENDPROPERTIES
+  
+  METHODS
+    Version: 3
+    SOURCE #classDeclaration
+      #public class FormRun extends ObjectRun
+      #{
+      # Dimension1 bu;
+      #}
+    ENDSOURCE
+  ENDMETHODS
+  OBJECTBANK
+    PROPERTIES
+    ENDPROPERTIES
+    
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #ERL_OpnameUserGroupMap
+          Table               #ERL_OpnameUserGroupMap
+          JoinSource          #ERL_OpnameUserGroup
+          LinkType            #Active
+          InsertAtEnd         #No
+          InsertIfEmpty       #No
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+      METHODS
+        Version: 3
+        SOURCE #validateWrite
+          #public boolean validateWrite()
+          #{
+          #    boolean ret = true;
+          #    ERL_OpnameUserAndroid   user;
+          #    ERL_OpnameUserGroup     groupT;
+          #    ERL_OpnameUserGroupMap  groupMap;
+          #    ERL_OpnamePeriodeEvent  event;
+          #
+          #
+          #    select username from user
+          #    join description from groupT
+          #    join groupMap
+          #    join description from event
+          #    where
+          #        user.Username == ERL_OpnameUserGroupMap.Username &&
+          #        user.Username == groupMap.Username &&
+          #        groupMap.GroupRecId == groupT.RecId &&
+          #        groupT.PeriodeRecId == event.RecId &&
+          #        (event.FromDate <= today() && event.ToDate >= today());
+          #
+          #    if( user.Username){
+          #       ret = false;
+          #       throw error(strfmt('User %1 sudah terdaftar pada event %2, dalam group %3', user.Username, event.Description, groupT.Description));
+          #    }
+          #    return ret;
+          #}
+          #
+        ENDSOURCE
+      ENDMETHODS
+    ENDDATASOURCE
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #ERL_OpnameUserGroup
+          Table               #ERL_OpnameUserGroup
+          InsertAtEnd         #No
+          InsertIfEmpty       #No
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+      METHODS
+        Version: 3
+        SOURCE #validateDelete
+          #public boolean validateDelete()
+          #{
+          #    ERL_StockOpname ERL_StockOpname;
+          #    boolean ret;
+          #
+          #    ret = super();
+          #
+          #    select firstonly firstfast groupRecId from ERL_StockOpname
+          #    index hint GroupIdx
+          #    where ERL_StockOpname.GroupRecId == ERL_OpnameUserGroup.RecId;
+          #
+          #    if(ERL_StockOpname.GroupRecId){
+          #        ret = checkfailed(strfmt('Group ini tidak boleh dihapus karna sudah melakukan stock sampling!'));
+          #    }
+          #
+          #    return ret;
+          #}
+        ENDSOURCE
+        SOURCE #validateWrite
+          #public boolean validateWrite()
+          #{
+          #    Args        args;
+          #    FormRun     formRun;
+          #    boolean     ret;
+          #    ERL_OpnameCostCenter ERL_OpnameCostCenter;
+          #
+          #    ret = super();
+          #
+          #    if(ERL_OpnameUserGroup.Dimension[2] == ""){
+          #        select firstonly firstfast dimension2 from ERL_OpnameCostCenter where ERL_OpnameCostCenter.dimension1 == bu;
+          #        if(!ERL_OpnameCostCenter){
+          #            ret = checkfailed(strfmt('Harap config cost center terlebih dahulu!'));
+          #            args = new args();
+          #            args.name(formStr(ERL_OpnameSetting));
+          #            formRun=new FormRun(args);
+          #            formRun.run();
+          #            formRun.wait();
+          #        }else{
+          #            ERL_OpnameUserGroup.Dimension[2] = ERL_OpnameCostCenter.Dimension2;
+          #        }
+          #
+          #    }
+          #
+          #    return ret;
+          #}
+        ENDSOURCE
+        SOURCE #init
+          #public void init()
+          #{
+          #    super();
+          #    bu = ERL_Global::getUserBU();
+          #
+          #    if(bu != "50")
+          #        this.query().dataSourceTable(tableNum("ERL_OpnameUserGroup")).addRange(fieldNum(ERL_OpnameUserGroup,Dimension)).value(bu);
+          #}
+        ENDSOURCE
+      ENDMETHODS
+    ENDDATASOURCE
+  ENDOBJECTBANK
+  
+  JOINS
+    ERL_OpnameUserGroupMap ERL_OpnameUserGroup
+  ENDJOINS
+  
+  DESIGN
+    PROPERTIES
+      Caption             #Opname Group Setting
+    ENDPROPERTIES
+    
+    CONTAINER
+      CONTROL GROUP
+        PROPERTIES
+          Name                #group
+          Width               #Column width
+          Height              #Column height
+        ENDPROPERTIES
+        
+          CONTAINER
+            CONTROL TAB
+              PROPERTIES
+                Name                #Tab
+                Width               #Column width
+                Height              #Column height
+              ENDPROPERTIES
+              
+              CONTAINER
+                CONTROL TABPAGE
+                  PROPERTIES
+                    Name                #UserGroup
+                    Width               #Column width
+                    Height              #Column height
+                    Caption             #Group Setting
+                  ENDPROPERTIES
+                  
+                  CONTAINER
+                    CONTROL GROUP
+                      PROPERTIES
+                        Name                #TopGroup
+                        Width               #Column width
+                        Height              #Column height
+                        Caption             #Group List
+                      ENDPROPERTIES
+                      
+                        CONTAINER
+                          CONTROL GROUP
+                            PROPERTIES
+                              Name                #Group1
+                              Width               #Column width
+                              Height              #Column height
+                            ENDPROPERTIES
+                            
+                              CONTAINER
+                                CONTROL GRID
+                                  PROPERTIES
+                                    Name                #userGrouplist
+                                    Width               #Column width
+                                    Height              #Column height
+                                    DataSource          #ERL_OpnameUserGroup
+                                  ENDPROPERTIES
+                                  
+                                    CONTAINER
+                                      CONTROL STRINGEDIT
+                                        PROPERTIES
+                                          Name                #ERL_OpnameUserGroup_Description
+                                          DataSource          #ERL_OpnameUserGroup
+                                          DataField           #Description
+                                        ENDPROPERTIES
+                                        
+                                      ENDCONTROL 
+                                      
+                                      CONTROL STRINGEDIT
+                                        PROPERTIES
+                                          Name                #ERL_OpnameUserGroup_InventSiteId
+                                          DataSource          #ERL_OpnameUserGroup
+                                          DataField           #InventSiteId
+                                        ENDPROPERTIES
+                                        
+                                      ENDCONTROL 
+                                      
+                                      CONTROL STRINGEDIT
+                                        PROPERTIES
+                                          Name                #ERL_OpnameUserGroup_MasterWHID
+                                          DataSource          #ERL_OpnameUserGroup
+                                          DataField           #MasterWHID
+                                        ENDPROPERTIES
+                                        
+                                      ENDCONTROL 
+                                      
+                                      CONTROL INT64EDIT
+                                        PROPERTIES
+                                          Name                #ERL_OpnameUserGroup_PeriodeRecId
+                                          DataSource          #ERL_OpnameUserGroup
+                                          DataField           #PeriodeRecId
+                                        ENDPROPERTIES
+                                        
+                                        METHODS
+                                          Version: 3
+                                          SOURCE #lookup
+                                            #public void lookup()
+                                            #{
+                                            #
+                                            #    Query                   q = new query();
+                                            #    QueryBuildDataSource    qbds;
+                                            #    SysTableLookup          stl;
+                                            #
+                                            #    stl = SysTableLookup::newParameters(tablenum(ERL_OpnamePeriodeEvent),this);
+                                            #    stl.addLookupfield(fieldnum(ERL_OpnamePeriodeEvent,recid));
+                                            #    stl.addLookupfield(fieldnum(ERL_OpnamePeriodeEvent,Description));
+                                            #    stl.addLookupfield(fieldnum(ERL_OpnamePeriodeEvent,FromDate));
+                                            #    stl.addLookupfield(fieldnum(ERL_OpnamePeriodeEvent,ToDate));
+                                            #    stl.addLookupfield(fieldnum(ERL_OpnamePeriodeEvent,Dimension));
+                                            #    stl.addLookupfield(fieldnum(ERL_OpnamePeriodeEvent,PeriodeEventStatus));
+                                            #    stl.addLookupfield(fieldnum(ERL_OpnamePeriodeEvent,Sampling));
+                                            #
+                                            #    qbds = q.addDataSource(tablenum(ERL_OpnamePeriodeEvent));
+                                            #    qbds.addRange(fieldnum(ERL_OpnamePeriodeEvent,Dimension)).value(sysquery::value(bu));
+                                            #    qbds.addRange(fieldnum(ERL_OpnamePeriodeEvent,PeriodeEventStatus)).value(sysquery::value(ERL_OpnamePeriodeEventStatus::Open));
+                                            #
+                                            #    stl.parmQuery(q);
+                                            #    stl.performFormLookup();
+                                            #}
+                                          ENDSOURCE
+                                        ENDMETHODS
+                                      ENDCONTROL 
+                                      
+                                      CONTROL STRINGEDIT
+                                        PROPERTIES
+                                          Name                #PeriodeDesc
+                                          AllowEdit           #No
+                                          Label               #Periode Desc
+                                          DataSource          #ERL_OpnameUserGroup
+                                          DataMethod          #PeriodeDesc
+                                        ENDPROPERTIES
+                                        
+                                      ENDCONTROL 
+                                      
+                                      CONTROL DATEEDIT
+                                        PROPERTIES
+                                          Name                #PeriodeFromDate
+                                          AllowEdit           #No
+                                          Label               #From Date
+                                          DataSource          #ERL_OpnameUserGroup
+                                          DataMethod          #PeriodeFromDate
+                                        ENDPROPERTIES
+                                        
+                                      ENDCONTROL 
+                                      
+                                      CONTROL DATEEDIT
+                                        PROPERTIES
+                                          Name                #PeriodeToDate
+                                          AllowEdit           #No
+                                          Label               #To Date
+                                          DataSource          #ERL_OpnameUserGroup
+                                          DataMethod          #PeriodeToDate
+                                        ENDPROPERTIES
+                                        
+                                      ENDCONTROL 
+                                      
+                                      CONTROL STRINGEDIT
+                                        PROPERTIES
+                                          Name                #ERL_OpnameUserGroup_Dimension[1]
+                                          DataSource          #ERL_OpnameUserGroup
+                                          DataField           #Dimension[1]
+                                        ENDPROPERTIES
+                                        
+                                      ENDCONTROL 
+                                      
+                                      CONTROL STRINGEDIT
+                                        PROPERTIES
+                                          Name                #ERL_OpnameUserGroup_Dimension[2]
+                                          DataSource          #ERL_OpnameUserGroup
+                                          DataField           #Dimension[2]
+                                        ENDPROPERTIES
+                                        
+                                      ENDCONTROL 
+                                      
+                                    ENDCONTAINER
+                                    
+                                ENDCONTROL 
+                                
+                              ENDCONTAINER
+                              
+                          ENDCONTROL 
+                          
+                          CONTROL BUTTONGROUP
+                            PROPERTIES
+                              Name                #ButtonGroup1
+                            ENDPROPERTIES
+                            
+                            CONTAINER
+                              CONTROL BUTTON
+                                PROPERTIES
+                                  Name                #NewPeriodeEvent
+                                  Visible             #No
+                                  Text                #New Periode Event
+                                ENDPROPERTIES
+                                
+                                METHODS
+                                  Version: 3
+                                  SOURCE #clicked
+                                    #void clicked()
+                                    #{
+                                    #    Args        args;
+                                    #    FormRun     formRun;
+                                    #    ;
+                                    #
+                                    #    args = new args();
+                                    #    args.name(formStr(ERL_OpnamePeriodeEvent));
+                                    #
+                                    #    formRun=new FormRun(args);
+                                    #    formRun.run();
+                                    #    formRun.wait();
+                                    #}
+                                  ENDSOURCE
+                                ENDMETHODS
+                              ENDCONTROL 
+                              
+                              CONTROL BUTTON
+                                PROPERTIES
+                                  Name                #NewUser
+                                  Text                #Add New User
+                                ENDPROPERTIES
+                                
+                                METHODS
+                                  Version: 3
+                                  SOURCE #clicked
+                                    #void clicked()
+                                    #{
+                                    #    Args        args;
+                                    #    FormRun     formRun;
+                                    #    ;
+                                    #
+                                    #    args = new args();
+                                    #    args.name(formStr(ERL_OpnameUserAndroid));
+                                    #
+                                    #    formRun=new FormRun(args);
+                                    #    formRun.run();
+                                    #    formRun.wait();
+                                    #}
+                                  ENDSOURCE
+                                ENDMETHODS
+                              ENDCONTROL 
+                              
+                              CONTROL BUTTON
+                                PROPERTIES
+                                  Name                #OpnameSetting
+                                  Visible             #No
+                                  Text                #Opname Setting
+                                ENDPROPERTIES
+                                
+                                METHODS
+                                  Version: 3
+                                  SOURCE #clicked
+                                    #void clicked()
+                                    #{
+                                    #    Args        args;
+                                    #    FormRun     formRun;
+                                    #    ;
+                                    #
+                                    #    args = new args();
+                                    #    args.name(formStr(ERL_OpnameSetting));
+                                    #
+                                    #    formRun=new FormRun(args);
+                                    #    formRun.run();
+                                    #    formRun.wait();
+                                    #}
+                                  ENDSOURCE
+                                ENDMETHODS
+                              ENDCONTROL 
+                              
+                            ENDCONTAINER
+                            
+                          ENDCONTROL 
+                          
+                        ENDCONTAINER
+                        
+                    ENDCONTROL 
+                    
+                    CONTROL GROUP
+                      PROPERTIES
+                        Name                #BottomGroup
+                        Width               #Column width
+                        Height              #Column height
+                        Caption             #Group Line
+                      ENDPROPERTIES
+                      
+                        CONTAINER
+                          CONTROL GROUP
+                            PROPERTIES
+                              Name                #gridLineGroup
+                              Width               #Column width
+                              Height              #Column height
+                            ENDPROPERTIES
+                            
+                              CONTAINER
+                                CONTROL GRID
+                                  PROPERTIES
+                                    Name                #GroupLine
+                                    Width               #Column width
+                                    Height              #Column height
+                                    DataSource          #ERL_OpnameUserGroupMap
+                                  ENDPROPERTIES
+                                  
+                                    CONTAINER
+                                      CONTROL STRINGEDIT
+                                        PROPERTIES
+                                          Name                #ERL_OpnameUserGroupMap_Username
+                                          DataSource          #ERL_OpnameUserGroupMap
+                                          DataField           #Username
+                                        ENDPROPERTIES
+                                        
+                                        METHODS
+                                          Version: 3
+                                          SOURCE #lookup
+                                            #public void lookup()
+                                            #{
+                                            #
+                                            #    Query                   q = new query();
+                                            #    QueryBuildDataSource    qbds;
+                                            #    SysTableLookup          stl;
+                                            #
+                                            #    stl = SysTableLookup::newParameters(tablenum(ERL_OpnameUserAndroid),this);
+                                            #    stl.addLookupfield(fieldnum(ERL_OpnameUserAndroid,Username));
+                                            #    stl.addLookupfield(fieldnum(ERL_OpnameUserAndroid,Password));
+                                            #    stl.addLookupfield(fieldnum(ERL_OpnameUserAndroid,Name));
+                                            #    stl.addLookupfield(fieldnum(ERL_OpnameUserAndroid,Dimension1));
+                                            #    stl.addLookupfield(fieldnum(ERL_OpnameUserAndroid,EmplId));
+                                            #
+                                            #
+                                            #    qbds = q.addDataSource(tablenum(ERL_OpnameUserAndroid));
+                                            #    qbds.addRange(fieldnum(ERL_OpnameUserAndroid,Dimension1)).value(sysquery::value(bu));
+                                            #
+                                            #    stl.parmQuery(q);
+                                            #    stl.performFormLookup();
+                                            #}
+                                          ENDSOURCE
+                                        ENDMETHODS
+                                      ENDCONTROL 
+                                      
+                                      CONTROL STRINGEDIT
+                                        PROPERTIES
+                                          Name                #Name
+                                          AllowEdit           #No
+                                          DataSource          #ERL_OpnameUserGroupMap
+                                          DataMethod          #Name
+                                        ENDPROPERTIES
+                                        
+                                      ENDCONTROL 
+                                      
+                                      CONTROL STRINGEDIT
+                                        PROPERTIES
+                                          Name                #emplid
+                                          AllowEdit           #No
+                                          DataSource          #ERL_OpnameUserGroupMap
+                                          DataMethod          #emplid
+                                        ENDPROPERTIES
+                                        
+                                      ENDCONTROL 
+                                      
+                                      CONTROL STRINGEDIT
+                                        PROPERTIES
+                                          Name                #Dim
+                                          AllowEdit           #No
+                                          DataSource          #ERL_OpnameUserGroupMap
+                                          DataMethod          #Dim
+                                        ENDPROPERTIES
+                                        
+                                      ENDCONTROL 
+                                      
+                                    ENDCONTAINER
+                                    
+                                ENDCONTROL 
+                                
+                              ENDCONTAINER
+                              
+                          ENDCONTROL 
+                          
+                        ENDCONTAINER
+                        
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+                ENDCONTROL 
+                
+              ENDCONTAINER
+              
+            ENDCONTROL 
+            
+          ENDCONTAINER
+          
+      ENDCONTROL 
+      
+    ENDCONTAINER
+    
+  ENDDESIGN
+  
+ENDFORM
+
+
+***Element: END

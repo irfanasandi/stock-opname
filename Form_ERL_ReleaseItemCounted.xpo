@@ -1,0 +1,331 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: FRM
+
+; Microsoft Dynamics AX Forms unloaded
+; --------------------------------------------------------------------------------
+FRMVERSION 5
+
+FORM #ERL_ReleaseItemCounted
+  PROPERTIES
+    Name                #ERL_ReleaseItemCounted
+  ENDPROPERTIES
+  
+  METHODS
+    Version: 3
+    SOURCE #classDeclaration
+      #public class FormRun extends ObjectRun
+      #{
+      #    Dialog          dialog;
+      #    DialogField     dSite;
+      #    DialogField     dWH;
+      #    DialogField     dItemId;
+      #    DialogField     dJournal;
+      #
+      #    InventSiteId        site;
+      #    InventLocationId    wh;
+      #    ItemId              itemid;
+      #    InventJournalId     journal;
+      #}
+    ENDSOURCE
+    SOURCE #refresh
+      #public void refresh()
+      #{
+      #    ERL_ReleaseItemCounted_ds.reread();
+      #    ERL_ReleaseItemCounted_ds.research(true);
+      #}
+    ENDSOURCE
+    SOURCE #initialize
+      #void initialize()
+      #{
+      #    QueryBuildDataSource    qbds;
+      #
+      #    ;
+      #
+      #    qbds = ERL_ReleaseItemCounted_ds.query().dataSourceTable(tablenum(ERL_ReleaseItemCounted));
+      #    qbds.clearRanges();
+      #
+      #    if(site!=""){
+      #        qbds.addRange(fieldnum(ERL_ReleaseItemCounted, InventSiteId)).value(sysQuery::value(site));
+      #    }
+      #    if(itemId!=""){
+      #        qbds.addRange(fieldnum(ERL_ReleaseItemCounted, ItemId)).value(sysQuery::value(itemid));
+      #    }
+      #
+      #    if(journal!="") {
+      #        qbds.addRange(fieldnum(ERL_ReleaseItemCounted, CountingJournalId)).value(sysQuery::value(journal));
+      #    } else {
+      #        qbds.addRange(fieldnum(ERL_ReleaseItemCounted, CountingJournalId)).value(sysQuery::valueNot(""));
+      #    }
+      #
+      #}
+    ENDSOURCE
+    SOURCE #init
+      #public void init()
+      #{
+      #    InventSite       InventSite = InventSite::find(ERL_Global::getUserBU());
+      #    ;
+      #
+      #    dialog = new Dialog("Release Item Counted");
+      #
+      #    dSite   = dialog.addFieldValue(typeid(InventSiteId), site);
+      #    dSite.value(InventSite.SiteId);
+      #    if(InventSite.SiteId != "50")
+      #        dSite.active(false);
+      #
+      #    dJournal = dialog.addFieldValue(typeid(InventJournalid), journal);
+      #    dWH     = dialog.addFieldValue(typeid(InventLocationId), wh);
+      #    //dWH.value(InventSite.DefaultWhs);
+      #    dItemId = dialog.addFieldValue(typeid(ItemId), itemid);
+      #
+      #    dialog.run();
+      #    if(dialog.closedOk())
+      #    {
+      #        super();
+      #        site = dSite.value();
+      #        wh = dWH.value();
+      #        itemid = ditemId.value();
+      #        journal = dJournal.value();
+      #        this.initialize();
+      #    }
+      #    else
+      #    {
+      #        super();
+      #        this.close();
+      #    }
+      #
+      #}
+    ENDSOURCE
+  ENDMETHODS
+  OBJECTBANK
+    PROPERTIES
+    ENDPROPERTIES
+    
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #ERL_ReleaseItemCounted
+          Table               #ERL_ReleaseItemCounted
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+    ENDDATASOURCE
+  ENDOBJECTBANK
+  
+  JOINS
+  ENDJOINS
+  
+  DESIGN
+    PROPERTIES
+      Caption             #Release Item Counted
+    ENDPROPERTIES
+    
+    CONTAINER
+      CONTROL TAB
+        PROPERTIES
+          Name                #Tab
+          Width               #Column width
+          Height              #Column height
+        ENDPROPERTIES
+        
+        CONTAINER
+          CONTROL TABPAGE
+            PROPERTIES
+              Name                #Overview
+              Caption             #Overview
+            ENDPROPERTIES
+            
+            CONTAINER
+              CONTROL GRID
+                PROPERTIES
+                  Name                #Grid
+                  AllowEdit           #No
+                  Width               #Column width
+                  Height              #Column height
+                  DataSource          #ERL_ReleaseItemCounted
+                ENDPROPERTIES
+                
+                  CONTAINER
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #Grid_InventSiteId
+                        DataSource          #ERL_ReleaseItemCounted
+                        DataField           #InventSiteId
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #Grid_inventDimId
+                        DataSource          #ERL_ReleaseItemCounted
+                        DataField           #inventDimId
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #Grid_ItemId
+                        DataSource          #ERL_ReleaseItemCounted
+                        DataField           #ItemId
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #Grid_InventLocationId
+                        DataSource          #ERL_ReleaseItemCounted
+                        DataField           #InventLocationId
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #Grid_wMSLocationId
+                        DataSource          #ERL_ReleaseItemCounted
+                        DataField           #wMSLocationId
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL CHECKBOX
+                      PROPERTIES
+                        Name                #Grid_CountingStarted
+                        BackgroundColor     #Window background
+                        DataSource          #ERL_ReleaseItemCounted
+                        DataField           #CountingStarted
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #Grid_CountingJournalId
+                        DataSource          #ERL_ReleaseItemCounted
+                        DataField           #CountingJournalId
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL CHECKBOX
+                      PROPERTIES
+                        Name                #Grid_Posted
+                        BackgroundColor     #Window background
+                        DataSource          #ERL_ReleaseItemCounted
+                        DataField           #Posted
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #Grid_Description
+                        DataSource          #ERL_ReleaseItemCounted
+                        DataField           #Description
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+            ENDCONTAINER
+            
+          ENDCONTROL 
+          
+          CONTROL TABPAGE
+            PROPERTIES
+              Name                #JourTab
+              Caption             #Journal
+            ENDPROPERTIES
+            
+            CONTAINER
+              CONTROL GROUP
+                PROPERTIES
+                  Name                #Group
+                  DataSource          #ERL_ReleaseItemCounted
+                ENDPROPERTIES
+                
+                  CONTAINER
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #Group_JournalId
+                        DataSource          #ERL_ReleaseItemCounted
+                        DataField           #JournalId
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL CHECKBOX
+                      PROPERTIES
+                        Name                #Group_Posted
+                        DataSource          #ERL_ReleaseItemCounted
+                        DataField           #Posted
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #Group_Description
+                        DataSource          #ERL_ReleaseItemCounted
+                        DataField           #Description
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL UTCDATETIMEEDIT
+                      PROPERTIES
+                        Name                #ERL_ReleaseItemCounted_PostedDateTime
+                        DataSource          #ERL_ReleaseItemCounted
+                        DataField           #PostedDateTime
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+            ENDCONTAINER
+            
+          ENDCONTROL 
+          
+        ENDCONTAINER
+        
+      ENDCONTROL 
+      
+      CONTROL BUTTONGROUP
+        PROPERTIES
+          Name                #ButtonGroup
+        ENDPROPERTIES
+        
+        CONTAINER
+          CONTROL MENUITEMBUTTON
+            PROPERTIES
+              Name                #ERL_ReleaseItem
+              MenuItemType        #Action
+              MenuItemName        #ERL_ReleaseItem
+            ENDPROPERTIES
+            
+          ENDCONTROL 
+          
+        ENDCONTAINER
+        
+      ENDCONTROL 
+      
+    ENDCONTAINER
+    
+  ENDDESIGN
+  
+ENDFORM
+
+
+***Element: END

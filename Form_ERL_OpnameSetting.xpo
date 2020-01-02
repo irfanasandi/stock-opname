@@ -1,0 +1,431 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: FRM
+
+; Microsoft Dynamics AX Forms unloaded
+; --------------------------------------------------------------------------------
+FRMVERSION 5
+
+FORM #ERL_OpnameSetting
+  PROPERTIES
+    Name                #ERL_OpnameSetting
+  ENDPROPERTIES
+  
+  METHODS
+    Version: 3
+    SOURCE #classDeclaration
+      #public class FormRun extends ObjectRun
+      #{
+      #    QueryBuildDataSource        qbdsStatus, qbdsDim, qbdsPeriode, qbdsGrade;
+      #    QueryBuildRange             qbr;
+      #}
+    ENDSOURCE
+    SOURCE #init
+      #public void init()
+      #{
+      #    Dimension1                  bu = SysUserInfo::find(curuserid()).Dimension1;
+      #    ERL_OpnamePeriodeEvent      periode;
+      #    ;
+      #    super();
+      #    qbdsStatus = ERL_OpnameStatus_ds.query().dataSourceTable(tablenum(erl_opnameStatus));
+      #    qbdsStatus.addRange(fieldnum(erl_opnameStatus, Dimension1)).value(bu);
+      #
+      #
+      #    qbdsDim = ERL_OpnameCostCenter_ds.query().dataSourceTable(tablenum(erl_OpnameCostCenter));
+      #    qbdsDim.addRange(fieldnum(erl_opnamecostcenter, dimension1)).value(bu);
+      #
+      #    qbdsPeriode = ERL_OpnamePeriodeEvent_ds.query().dataSourceTable(tablenum(ERL_OpnamePeriodeEvent));
+      #    qbdsPeriode.addRange(fieldId2ext(fieldnum(ERL_OpnamePeriodeEvent, Dimension),1)).value(bu);
+      #
+      #    GradeWHTab.visible(bu == '51');
+      #
+      #    update_recordset periode setting PeriodeEventStatus = ERL_OpnamePeriodeEventStatus::Close
+      #        where periode.ToDate < today() && periode.Dimension[1] == bu;
+      #
+      #}
+    ENDSOURCE
+  ENDMETHODS
+  OBJECTBANK
+    PROPERTIES
+    ENDPROPERTIES
+    
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #ERL_OpnameStatus
+          Table               #ERL_OpnameStatus
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+    ENDDATASOURCE
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #ERL_OpnameCostCenter
+          Table               #ERL_OpnameCostCenter
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+    ENDDATASOURCE
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #ERL_OpnamePeriodeEvent
+          Table               #ERL_OpnamePeriodeEvent
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+    ENDDATASOURCE
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #ERL_GradeStockOpname
+          Table               #ERL_GradeStockOpname
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+    ENDDATASOURCE
+  ENDOBJECTBANK
+  
+  JOINS
+  ENDJOINS
+  
+  DESIGN
+    PROPERTIES
+      Caption             #Stock Opname Setting
+    ENDPROPERTIES
+    
+    CONTAINER
+      CONTROL TAB
+        PROPERTIES
+          Name                #Tab
+          Width               #Column width
+          Height              #Column height
+        ENDPROPERTIES
+        
+        CONTAINER
+          CONTROL TABPAGE
+            PROPERTIES
+              Name                #JournalStatus
+              Caption             #Toleransi Selisih
+            ENDPROPERTIES
+            
+            CONTAINER
+              CONTROL GRID
+                PROPERTIES
+                  Name                #Grid
+                  Width               #Column width
+                  Height              #Column height
+                  DataSource          #ERL_OpnameStatus
+                ENDPROPERTIES
+                
+                  CONTAINER
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #ERL_OpnameStatus_ItemCategoryId
+                        DataSource          #ERL_OpnameStatus
+                        DataField           #ItemCategoryId
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #ERL_OpnameStatus_Dimension1
+                        AllowEdit           #No
+                        DataSource          #ERL_OpnameStatus
+                        DataField           #Dimension1
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL REALEDIT
+                      PROPERTIES
+                        Name                #ERL_OpnameStatus_Material
+                        Label               #Toleransi Selisih Material
+                        DataSource          #ERL_OpnameStatus
+                        DataField           #Material
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL REALEDIT
+                      PROPERTIES
+                        Name                #ERL_OpnameStatus_NonMaterial
+                        Visible             #No
+                        DataSource          #ERL_OpnameStatus
+                        DataField           #NonMaterial
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+            ENDCONTAINER
+            
+          ENDCONTROL 
+          
+          CONTROL TABPAGE
+            PROPERTIES
+              Name                #CostCenter
+              Caption             #Cost Center
+            ENDPROPERTIES
+            
+            CONTAINER
+              CONTROL GROUP
+                PROPERTIES
+                  Name                #Dimension
+                  Caption             #Dimensions
+                ENDPROPERTIES
+                
+                  CONTAINER
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #ERL_OpnameCostCenter_Dimension1
+                        AllowEdit           #No
+                        DataSource          #ERL_OpnameCostCenter
+                        DataField           #Dimension1
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #ERL_OpnameCostCenter_Dimension2
+                        DataSource          #ERL_OpnameCostCenter
+                        DataField           #Dimension2
+                      ENDPROPERTIES
+                      
+                      METHODS
+                        Version: 3
+                        SOURCE #lookup
+                          #public void lookup()
+                          #{
+                          #    SysTableLookup          stl;
+                          #    queryBuildDatasource    qbds;
+                          #    queryBuildRange         qbrCC;
+                          #    query                   query = new Query();
+                          #
+                          #    qbds = query.addDataSource(tablenum(Dimensions));
+                          #    //qbds.addRange(fieldnum(
+                          #    super();
+                          #}
+                        ENDSOURCE
+                      ENDMETHODS
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+            ENDCONTAINER
+            
+          ENDCONTROL 
+          
+          CONTROL TABPAGE
+            PROPERTIES
+              Name                #TabPageSetMaxOpnameLine
+              Caption             #Opname Lines
+            ENDPROPERTIES
+            
+            CONTAINER
+              CONTROL GROUP
+                PROPERTIES
+                  Name                #Group
+                  Caption             #Setting Max Opname Lines
+                ENDPROPERTIES
+                
+                  CONTAINER
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #ERL_OpnameCostCenter_Dimension11
+                        AllowEdit           #No
+                        DataSource          #ERL_OpnameCostCenter
+                        DataField           #Dimension1
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL INTEDIT
+                      PROPERTIES
+                        Name                #ERL_OpnameCostCenter_MaxOpnameLines
+                        DataSource          #ERL_OpnameCostCenter
+                        DataField           #MaxOpnameLines
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+            ENDCONTAINER
+            
+          ENDCONTROL 
+          
+          CONTROL TABPAGE
+            PROPERTIES
+              Name                #Periode
+              Caption             #Periode
+            ENDPROPERTIES
+            
+            CONTAINER
+              CONTROL GRID
+                PROPERTIES
+                  Name                #GridPeriode
+                  Width               #Column width
+                  Height              #Column height
+                  DataSource          #ERL_OpnamePeriodeEvent
+                ENDPROPERTIES
+                
+                  CONTAINER
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #ERL_OpnamePeriodeEvent_Description
+                        DataSource          #ERL_OpnamePeriodeEvent
+                        DataField           #Description
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL DATEEDIT
+                      PROPERTIES
+                        Name                #ERL_OpnamePeriodeEvent_FromDate
+                        DataSource          #ERL_OpnamePeriodeEvent
+                        DataField           #FromDate
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL DATEEDIT
+                      PROPERTIES
+                        Name                #ERL_OpnamePeriodeEvent_ToDate
+                        DataSource          #ERL_OpnamePeriodeEvent
+                        DataField           #ToDate
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #ERL_OpnamePeriodeEvent_Dimension[1]
+                        AllowEdit           #No
+                        DataSource          #ERL_OpnamePeriodeEvent
+                        DataField           #Dimension[1]
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL COMBOBOX
+                      PROPERTIES
+                        Name                #PeriodeStatus
+                        AutoDeclaration     #Yes
+                        Label               #Status
+                        DataSource          #ERL_OpnamePeriodeEvent
+                        DataField           #PeriodeEventStatus
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL CHECKBOX
+                      PROPERTIES
+                        Name                #ERL_OpnamePeriodeEvent_Sampling
+                        BackgroundColor     #Window background
+                        DataSource          #ERL_OpnamePeriodeEvent
+                        DataField           #Sampling
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+            ENDCONTAINER
+            
+          ENDCONTROL 
+          
+          CONTROL TABPAGE
+            PROPERTIES
+              Name                #GradeWHTab
+              AutoDeclaration     #Yes
+              Caption             #Grade Warehouse
+            ENDPROPERTIES
+            
+            CONTAINER
+              CONTROL GRID
+                PROPERTIES
+                  Name                #Grid1
+                  Width               #Column width
+                  Height              #Column height
+                  DataSource          #ERL_GradeStockOpname
+                ENDPROPERTIES
+                
+                  CONTAINER
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #ERL_GradeStockOpname_InventSiteId
+                        DataSource          #ERL_GradeStockOpname
+                        DataField           #InventSiteId
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #ERL_GradeStockOpname_InventLocationId
+                        DataSource          #ERL_GradeStockOpname
+                        DataField           #InventLocationId
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #ERL_GradeStockOpname_AGR_ItemGrade
+                        DataSource          #ERL_GradeStockOpname
+                        DataField           #AGR_ItemGrade
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #Itemname
+                        DataSource          #ERL_GradeStockOpname
+                        DataMethod          #itemname
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+            ENDCONTAINER
+            
+          ENDCONTROL 
+          
+        ENDCONTAINER
+        
+      ENDCONTROL 
+      
+    ENDCONTAINER
+    
+  ENDDESIGN
+  
+ENDFORM
+
+
+***Element: END

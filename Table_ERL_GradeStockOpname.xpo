@@ -1,0 +1,88 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: DBT
+
+; Microsoft Dynamics AX Table : ERL_GradeStockOpname unloaded
+; --------------------------------------------------------------------------------
+  TABLEVERSION 1
+  
+  TABLE #ERL_GradeStockOpname
+    PROPERTIES
+      Name                #ERL_GradeStockOpname
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #InventSiteId
+        STRING
+        PROPERTIES
+          Name                #InventSiteId
+          Table               #ERL_GradeStockOpname
+          ExtendedDataType    
+            ARRAY 
+              #InventSiteId
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #AGR_ItemGrade
+        STRING
+        PROPERTIES
+          Name                #AGR_ItemGrade
+          Table               #ERL_GradeStockOpname
+          ExtendedDataType    
+            ARRAY 
+              #AGR_ItemGrade
+              #
+            ENDARRAY
+          StringSize          #2
+        ENDPROPERTIES
+        
+      FIELD #InventLocationId
+        STRING
+        PROPERTIES
+          Name                #InventLocationId
+          Table               #ERL_GradeStockOpname
+          ExtendedDataType    
+            ARRAY 
+              #InventLocationId
+              #
+            ENDARRAY
+          StringSize          #20
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+    ENDGROUPS
+    
+    INDICES
+      #GradeIdx
+      PROPERTIES
+        Name                #GradeIdx
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #AGR_ItemGrade
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    REFERENCES
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+    METHODS
+      Version: 3
+      SOURCE #ItemName
+        #Display ItemName ItemName()
+        #{
+        #    ;
+        #    return AGR_gradeItem::find(this.AGR_ItemGrade).AGR_GradeName;
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDTABLE
+  
+
+***Element: END

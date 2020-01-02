@@ -1,0 +1,278 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: DBT
+
+; Microsoft Dynamics AX Table : ERL_StockOpnameLines unloaded
+; --------------------------------------------------------------------------------
+  TABLEVERSION 1
+  
+  TABLE #ERL_StockOpnameLines
+    PROPERTIES
+      Name                #ERL_StockOpnameLines
+      CreatedBy           #Yes
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #ItemId
+        STRING
+        PROPERTIES
+          Name                #ItemId
+          Mandatory           #Yes
+          Table               #ERL_StockOpnameLines
+          ExtendedDataType    
+            ARRAY 
+              #ItemId
+              #
+            ENDARRAY
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #PhysicalQty
+        REAL
+        PROPERTIES
+          Name                #PhysicalQty
+          Label               #Quantitiy Android
+          Table               #ERL_StockOpnameLines
+          ExtendedDataType    
+            ARRAY 
+              #ERL_StockCounted
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #ERL_MasterWHID
+        STRING
+        PROPERTIES
+          Name                #ERL_MasterWHID
+          Table               #ERL_StockOpnameLines
+          ExtendedDataType    
+            ARRAY 
+              #ERL_MasterWHID
+              #
+            ENDARRAY
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #AdminId
+        STRING
+        PROPERTIES
+          Name                #AdminId
+          Label               #Admin Id
+          Table               #ERL_StockOpnameLines
+          ExtendedDataType    
+            ARRAY 
+              #EmplId
+              #
+            ENDARRAY
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #wMsLocationId
+        STRING
+        PROPERTIES
+          Name                #wMsLocationId
+          Label               #Location
+          Table               #ERL_StockOpnameLines
+          ExtendedDataType    
+            ARRAY 
+              #WMSLocationId
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #ERL_JournalStatus
+        ENUM
+        PROPERTIES
+          Name                #ERL_JournalStatus
+          Table               #ERL_StockOpnameLines
+          EnumType            #ERL_JournalStatus
+        ENDPROPERTIES
+        
+      FIELD #OpnameRefrenceId
+        STRING
+        PROPERTIES
+          Name                #OpnameRefrenceId
+          Label               #Refrence Id
+          Table               #ERL_StockOpnameLines
+          StringSize          #25
+        ENDPROPERTIES
+        
+      FIELD #ERL_OpnameTagId
+        STRING
+        PROPERTIES
+          Name                #ERL_OpnameTagId
+          Table               #ERL_StockOpnameLines
+          ExtendedDataType    
+            ARRAY 
+              #ERL_OpnameTagId
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #TransDate
+        DATE
+        PROPERTIES
+          Name                #TransDate
+          Mandatory           #Yes
+          Table               #ERL_StockOpnameLines
+          ExtendedDataType    
+            ARRAY 
+              #JournalTransDate
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #Username
+        STRING
+        PROPERTIES
+          Name                #Username
+          Table               #ERL_StockOpnameLines
+          ExtendedDataType    
+            ARRAY 
+              #ERL_UsernameAndroid
+              #
+            ENDARRAY
+          StringSize          #15
+        ENDPROPERTIES
+        
+      FIELD #wMSLocationIdNew
+        STRING
+        PROPERTIES
+          Name                #wMSLocationIdNew
+          Label               #New Location
+          Table               #ERL_StockOpnameLines
+          ExtendedDataType    
+            ARRAY 
+              #WMSLocationId
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #LocationFound
+        ENUM
+        PROPERTIES
+          Name                #LocationFound
+          Table               #ERL_StockOpnameLines
+          ExtendedDataType    
+            ARRAY 
+              #NoYesId
+              #
+            ENDARRAY
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+      GROUP #Overview
+        PROPERTIES
+          Name                #Overview
+        ENDPROPERTIES
+        
+        GROUPFIELDS
+          #ItemId
+          #PhysicalQty
+          #ERL_MasterWHID
+          #AdminId
+          #wMsLocationId
+          #ERL_JournalStatus
+        ENDGROUPFIELDS
+      ENDGROUP
+    ENDGROUPS
+    
+    INDICES
+      #ItemIdIdx
+      PROPERTIES
+        Name                #ItemIdIdx
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+      ENDINDEXFIELDS
+      
+      #ERL_MasterWhIDx
+      PROPERTIES
+        Name                #ERL_MasterWhIDx
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #ERL_MasterWHID
+      ENDINDEXFIELDS
+      
+      #RecIdIdx
+      PROPERTIES
+        Name                #RecIdIdx
+        AllowDuplicates     #No
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #RecId
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    REFERENCES
+      REFERENCE #ERL_StockOpname
+        PROPERTIES
+          Name                #ERL_StockOpname
+          Table               #ERL_StockOpname
+        ENDPROPERTIES
+        
+        FIELDREFERENCES
+          REFERENCETYPE NORMAL
+          PROPERTIES
+            Field               #OpnameRefrenceId
+            RelatedField        #OpnameRefrenceId
+          ENDPROPERTIES
+          
+        ENDFIELDREFERENCES
+      ENDREFERENCE
+      REFERENCE #WHStockOpname
+        PROPERTIES
+          Name                #WHStockOpname
+          Table               #ERL_WHStockOpname
+        ENDPROPERTIES
+        
+        FIELDREFERENCES
+          REFERENCETYPE NORMAL
+          PROPERTIES
+            Field               #ERL_MasterWHID
+            RelatedField        #ERL_MasterWHID
+          ENDPROPERTIES
+          
+        ENDFIELDREFERENCES
+      ENDREFERENCE
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+    METHODS
+      Version: 3
+      SOURCE #Onhand
+        #display Qty Onhand(ERL_StockOpnameLines _lines)
+        #{
+        #    ERL_WHStockOpname       whstock;
+        #    InventDim               iDim;
+        #    InventSum               iSum;
+        #    Qty                     onhand;
+        #
+        #    while select whstock where _lines.ERL_MasterWHID == whstock.ERL_MasterWHID
+        #    {
+        #        select iDim where idim.InventLocationId == whstock.InventLocationId
+        #            && idim.wMSLocationId == _lines.wMSLocationId;
+        #        if(idim.inventDimId){
+        #            select isum where isum.InventDimId == idim.inventDimId
+        #                && isum.ItemId == _lines.ItemId;
+        #            onhand += isum.AvailPhysical;
+        #
+        #        }else {
+        #            onhand = 0;
+        #        }
+        #    }
+        #    return onhand;
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDTABLE
+  
+
+***Element: END

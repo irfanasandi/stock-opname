@@ -1,0 +1,82 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: DBT
+
+; Microsoft Dynamics AX Table : ERL_OpnameCostCenter unloaded
+; --------------------------------------------------------------------------------
+  TABLEVERSION 1
+  
+  TABLE #ERL_OpnameCostCenter
+    PROPERTIES
+      Name                #ERL_OpnameCostCenter
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #Dimension2
+        STRING
+        PROPERTIES
+          Name                #Dimension2
+          Table               #ERL_OpnameCostCenter
+          ExtendedDataType    
+            ARRAY 
+              #Dimension2
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #Dimension1
+        STRING
+        PROPERTIES
+          Name                #Dimension1
+          Table               #ERL_OpnameCostCenter
+          ExtendedDataType    
+            ARRAY 
+              #Dimension1
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #MaxOpnameLines
+        INT
+        PROPERTIES
+          Name                #MaxOpnameLines
+          Label               #Max Opname Lines
+          Table               #ERL_OpnameCostCenter
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+    ENDGROUPS
+    
+    INDICES
+    ENDINDICES
+    REFERENCES
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+    METHODS
+      Version: 3
+      SOURCE #find
+        #static ERL_OpnameCostCenter find(Dimension1      dim)
+        #{
+        #    ERL_OpnameCostCenter  ERL_OpnameCostCenter;
+        #    ;
+        #
+        #    if (dim)
+        #    {
+        #        select firstonly ERL_OpnameCostCenter
+        #            where ERL_OpnameCostCenter.Dimension1 == dim;
+        #    }
+        #
+        #    return ERL_OpnameCostCenter;
+        #}
+        #
+      ENDSOURCE
+    ENDMETHODS
+  ENDTABLE
+  
+
+***Element: END

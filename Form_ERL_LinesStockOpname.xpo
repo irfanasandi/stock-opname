@@ -1,0 +1,204 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: FRM
+
+; Microsoft Dynamics AX Forms unloaded
+; --------------------------------------------------------------------------------
+FRMVERSION 5
+
+FORM #ERL_LinesStockOpname
+  PROPERTIES
+    Name                #ERL_LinesStockOpname
+  ENDPROPERTIES
+  
+  METHODS
+    Version: 3
+    SOURCE #classDeclaration
+      #public class FormRun extends ObjectRun
+      #{
+      #}
+    ENDSOURCE
+  ENDMETHODS
+  OBJECTBANK
+    PROPERTIES
+    ENDPROPERTIES
+    
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #ERL_StockOpnameLines
+          Table               #ERL_StockOpnameLines
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+    ENDDATASOURCE
+  ENDOBJECTBANK
+  
+  JOINS
+  ENDJOINS
+  
+  DESIGN
+    PROPERTIES
+    ENDPROPERTIES
+    
+    CONTAINER
+      CONTROL GRID
+        PROPERTIES
+          Name                #Grid
+          Width               #Column width
+          Height              #Column height
+          DataSource          #ERL_StockOpnameLines
+        ENDPROPERTIES
+        
+          CONTAINER
+            CONTROL STRINGEDIT
+              PROPERTIES
+                Name                #ERL_StockOpnameLines_ItemId
+                DataSource          #ERL_StockOpnameLines
+                DataField           #ItemId
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL REALEDIT
+              PROPERTIES
+                Name                #ERL_StockOpnameLines_PhysicalQty
+                DataSource          #ERL_StockOpnameLines
+                DataField           #PhysicalQty
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL STRINGEDIT
+              PROPERTIES
+                Name                #ERL_StockOpnameLines_ERL_MasterWHID
+                DataSource          #ERL_StockOpnameLines
+                DataField           #ERL_MasterWHID
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL STRINGEDIT
+              PROPERTIES
+                Name                #ERL_StockOpnameLines_AdminId
+                DataSource          #ERL_StockOpnameLines
+                DataField           #AdminId
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL STRINGEDIT
+              PROPERTIES
+                Name                #ERL_StockOpnameLines_wMsLocationId
+                DataSource          #ERL_StockOpnameLines
+                DataField           #wMsLocationId
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL COMBOBOX
+              PROPERTIES
+                Name                #ERL_StockOpnameLines_ERL_JournalStatus
+                DataSource          #ERL_StockOpnameLines
+                DataField           #ERL_JournalStatus
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL STRINGEDIT
+              PROPERTIES
+                Name                #ERL_StockOpnameLines_OpnameRefrenceId
+                DataSource          #ERL_StockOpnameLines
+                DataField           #OpnameRefrenceId
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL STRINGEDIT
+              PROPERTIES
+                Name                #ERL_StockOpnameLines_ERL_OpnameTagId
+                DataSource          #ERL_StockOpnameLines
+                DataField           #ERL_OpnameTagId
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL DATEEDIT
+              PROPERTIES
+                Name                #ERL_StockOpnameLines_TransDate
+                DataSource          #ERL_StockOpnameLines
+                DataField           #TransDate
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL STRINGEDIT
+              PROPERTIES
+                Name                #ERL_StockOpnameLines_Username
+                DataSource          #ERL_StockOpnameLines
+                DataField           #Username
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL STRINGEDIT
+              PROPERTIES
+                Name                #ERL_StockOpnameLines_wMSLocationIdNew
+                DataSource          #ERL_StockOpnameLines
+                DataField           #wMSLocationIdNew
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL CHECKBOX
+              PROPERTIES
+                Name                #ERL_StockOpnameLines_LocationFound
+                BackgroundColor     #Window background
+                DataSource          #ERL_StockOpnameLines
+                DataField           #LocationFound
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL STRINGEDIT
+              PROPERTIES
+                Name                #ERL_StockOpnameLines_createdBy
+                DataSource          #ERL_StockOpnameLines
+                DataField           #createdBy
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL STRINGEDIT
+              PROPERTIES
+                Name                #ERL_StockOpnameLines_dataAreaId
+                DataSource          #ERL_StockOpnameLines
+                DataField           #dataAreaId
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL INT64EDIT
+              PROPERTIES
+                Name                #ERL_StockOpnameLines_RecId
+                DataSource          #ERL_StockOpnameLines
+                DataField           #RecId
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+          ENDCONTAINER
+          
+      ENDCONTROL 
+      
+    ENDCONTAINER
+    
+  ENDDESIGN
+  
+ENDFORM
+
+
+***Element: END
